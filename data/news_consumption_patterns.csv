@@ -1,0 +1,301 @@
+participant_id,platform_type,weekly_hours,trust_level,age_group,education_level
+P001,TV News,4.4,6,45-59,College
+P001,Social Media,15,2,45-59,College
+P001,Print Media,9,1,45-59,College
+P001,Podcasts,5.8,7,45-59,College
+P002,TV News,13,3,30-44,High School
+P002,Social Media,5.7,1,30-44,High School
+P002,Print Media,3.6,3,30-44,High School
+P002,Podcasts,14.5,6,30-44,High School
+P003,TV News,9.4,4,18-29,Graduate
+P003,Social Media,14.8,3,18-29,Graduate
+P003,Print Media,3.5,7,18-29,Graduate
+P003,Podcasts,1.9,4,18-29,Graduate
+P004,TV News,3.9,2,30-44,Graduate
+P004,Social Media,10.1,3,30-44,Graduate
+P004,Print Media,7.8,3,30-44,Graduate
+P004,Podcasts,12.9,2,30-44,Graduate
+P005,TV News,9,6,18-29,High School
+P005,Social Media,3.7,4,18-29,High School
+P005,Print Media,8.4,2,18-29,High School
+P005,Podcasts,5.8,2,18-29,High School
+P006,TV News,0.5,1,30-44,High School
+P006,Social Media,4.5,5,30-44,High School
+P006,Print Media,2.2,7,30-44,High School
+P006,Podcasts,10.1,3,30-44,High School
+P007,TV News,1.2,6,45-59,High School
+P007,Social Media,1.6,4,45-59,High School
+P007,Print Media,4.3,2,45-59,High School
+P007,Podcasts,8.6,1,45-59,High School
+P008,TV News,6.2,4,30-44,Graduate
+P008,Social Media,11.8,1,30-44,Graduate
+P008,Print Media,2.9,2,30-44,Graduate
+P008,Podcasts,9.9,2,30-44,Graduate
+P009,TV News,2.4,1,45-59,College
+P009,Social Media,10.2,6,45-59,College
+P009,Print Media,4.6,4,45-59,College
+P009,Podcasts,10.2,7,45-59,College
+P010,TV News,8.4,1,18-29,High School
+P010,Social Media,4.9,6,18-29,High School
+P010,Print Media,10.7,6,18-29,High School
+P010,Podcasts,9.6,4,18-29,High School
+P011,TV News,11.9,3,18-29,College
+P011,Social Media,5.1,5,18-29,College
+P011,Print Media,7.5,6,18-29,College
+P011,Podcasts,9.7,3,18-29,College
+P012,TV News,3.4,3,30-44,Graduate
+P012,Social Media,0.4,7,30-44,Graduate
+P012,Print Media,7.9,2,30-44,Graduate
+P012,Podcasts,12.1,3,30-44,Graduate
+P013,TV News,0.8,5,18-29,High School
+P013,Social Media,4.9,1,18-29,High School
+P013,Print Media,13.1,7,18-29,High School
+P013,Podcasts,12.7,1,18-29,High School
+P014,TV News,7.2,4,18-29,College
+P014,Social Media,12.6,3,18-29,College
+P014,Print Media,3.4,6,18-29,College
+P014,Podcasts,9.6,6,18-29,College
+P015,TV News,5.9,1,60+,College
+P015,Social Media,7.4,4,60+,College
+P015,Print Media,3.8,2,60+,College
+P015,Podcasts,1.5,5,60+,College
+P016,TV News,11.4,5,60+,Graduate
+P016,Social Media,5.4,4,60+,Graduate
+P016,Print Media,3.3,5,60+,Graduate
+P016,Podcasts,6.4,4,60+,Graduate
+P017,TV News,10.9,6,30-44,College
+P017,Social Media,7.8,1,30-44,College
+P017,Print Media,6.7,1,30-44,College
+P017,Podcasts,8,4,30-44,College
+P018,TV News,7.8,5,30-44,High School
+P018,Social Media,6.6,4,30-44,High School
+P018,Print Media,4.1,3,30-44,High School
+P018,Podcasts,11.7,2,30-44,High School
+P019,TV News,11.8,3,18-29,High School
+P019,Social Media,14.6,6,18-29,High School
+P019,Print Media,0.7,2,18-29,High School
+P019,Podcasts,3.6,2,18-29,High School
+P020,TV News,3.3,6,45-59,College
+P020,Social Media,12.2,6,45-59,College
+P020,Print Media,12.8,3,45-59,College
+P020,Podcasts,7.9,7,45-59,College
+P021,TV News,10.7,3,18-29,High School
+P021,Social Media,13.5,1,18-29,High School
+P021,Print Media,14.7,7,18-29,High School
+P021,Podcasts,2.6,5,18-29,High School
+P022,TV News,14.2,7,45-59,Graduate
+P022,Social Media,10.8,1,45-59,Graduate
+P022,Print Media,11.5,5,45-59,Graduate
+P022,Podcasts,11.1,2,45-59,Graduate
+P023,TV News,2.9,3,60+,College
+P023,Social Media,12.2,4,60+,College
+P023,Print Media,4.1,4,60+,College
+P023,Podcasts,11,6,60+,College
+P024,TV News,6.6,7,18-29,High School
+P024,Social Media,8.5,5,18-29,High School
+P024,Print Media,14.6,6,18-29,High School
+P024,Podcasts,2.1,6,18-29,High School
+P025,TV News,8.6,4,60+,College
+P025,Social Media,14.7,6,60+,College
+P025,Print Media,12.2,1,60+,College
+P025,Podcasts,0.7,4,60+,College
+P026,TV News,4,5,60+,College
+P026,Social Media,1.5,5,60+,College
+P026,Print Media,9.1,7,60+,College
+P026,Podcasts,10.1,4,60+,College
+P027,TV News,8.8,4,30-44,High School
+P027,Social Media,0.2,3,30-44,High School
+P027,Print Media,13.3,7,30-44,High School
+P027,Podcasts,8.2,2,30-44,High School
+P028,TV News,9.8,7,45-59,High School
+P028,Social Media,0.8,2,45-59,High School
+P028,Print Media,5.3,3,45-59,High School
+P028,Podcasts,7.8,7,45-59,High School
+P029,TV News,0.5,4,18-29,Graduate
+P029,Social Media,14.2,3,18-29,Graduate
+P029,Print Media,8.1,7,18-29,Graduate
+P029,Podcasts,8.1,6,18-29,Graduate
+P030,TV News,12.2,4,30-44,High School
+P030,Social Media,8.2,4,30-44,High School
+P030,Print Media,13,3,30-44,High School
+P030,Podcasts,6.6,7,30-44,High School
+P031,TV News,5,3,60+,Graduate
+P031,Social Media,0.8,7,60+,Graduate
+P031,Print Media,2,3,60+,Graduate
+P031,Podcasts,3.5,6,60+,Graduate
+P032,TV News,8.1,5,18-29,College
+P032,Social Media,9.9,3,18-29,College
+P032,Print Media,9.6,3,18-29,College
+P032,Podcasts,14.6,1,18-29,College
+P033,TV News,5.4,4,60+,High School
+P033,Social Media,12.8,6,60+,High School
+P033,Print Media,5.7,2,60+,High School
+P033,Podcasts,1,7,60+,High School
+P034,TV News,4.2,3,45-59,Graduate
+P034,Social Media,3.7,7,45-59,Graduate
+P034,Print Media,5.6,5,45-59,Graduate
+P034,Podcasts,14.7,3,45-59,Graduate
+P035,TV News,0.9,2,60+,Graduate
+P035,Social Media,0.6,2,60+,Graduate
+P035,Print Media,1.3,5,60+,Graduate
+P035,Podcasts,13.8,1,60+,Graduate
+P036,TV News,11.5,5,60+,Graduate
+P036,Social Media,8.9,7,60+,Graduate
+P036,Print Media,2.4,5,60+,Graduate
+P036,Podcasts,8.8,3,60+,Graduate
+P037,TV News,13.3,4,45-59,College
+P037,Social Media,12,6,45-59,College
+P037,Print Media,2.6,7,45-59,College
+P037,Podcasts,13.2,4,45-59,College
+P038,TV News,11.6,1,60+,Graduate
+P038,Social Media,8.3,5,60+,Graduate
+P038,Print Media,2.2,7,60+,Graduate
+P038,Podcasts,5.4,7,60+,Graduate
+P039,TV News,13.8,3,30-44,High School
+P039,Social Media,11.6,3,30-44,High School
+P039,Print Media,8.9,5,30-44,High School
+P039,Podcasts,1.7,4,30-44,High School
+P040,TV News,11.8,5,30-44,College
+P040,Social Media,1.8,6,30-44,College
+P040,Print Media,9.4,2,30-44,College
+P040,Podcasts,1.3,6,30-44,College
+P041,TV News,7,1,60+,College
+P041,Social Media,1.5,4,60+,College
+P041,Print Media,3.9,3,60+,College
+P041,Podcasts,1.4,1,60+,College
+P042,TV News,4.8,3,60+,Graduate
+P042,Social Media,13.3,2,60+,Graduate
+P042,Print Media,8.6,6,60+,Graduate
+P042,Podcasts,3.2,1,60+,Graduate
+P043,TV News,13.9,6,60+,High School
+P043,Social Media,14,2,60+,High School
+P043,Print Media,8.8,1,60+,High School
+P043,Podcasts,1.1,7,60+,High School
+P044,TV News,14.3,7,30-44,College
+P044,Social Media,0.6,2,30-44,College
+P044,Print Media,10.1,7,30-44,College
+P044,Podcasts,7,6,30-44,College
+P045,TV News,4.5,3,60+,Graduate
+P045,Social Media,1.7,6,60+,Graduate
+P045,Print Media,7.2,6,60+,Graduate
+P045,Podcasts,6.2,6,60+,Graduate
+P046,TV News,12,6,45-59,College
+P046,Social Media,12.1,5,45-59,College
+P046,Print Media,6.9,1,45-59,College
+P046,Podcasts,8.6,7,45-59,College
+P047,TV News,10.8,1,45-59,High School
+P047,Social Media,0.5,1,45-59,High School
+P047,Print Media,12.5,1,45-59,High School
+P047,Podcasts,2.3,5,45-59,High School
+P048,TV News,2,3,18-29,College
+P048,Social Media,3.8,4,18-29,College
+P048,Print Media,6.5,2,18-29,College
+P048,Podcasts,4.4,3,18-29,College
+P049,TV News,10.7,7,60+,Graduate
+P049,Social Media,3.8,1,60+,Graduate
+P049,Print Media,1,1,60+,Graduate
+P049,Podcasts,0.3,3,60+,Graduate
+P050,TV News,14.7,6,18-29,College
+P050,Social Media,13.6,1,18-29,College
+P050,Print Media,9,1,18-29,College
+P050,Podcasts,5.9,7,18-29,College
+P051,TV News,3.9,7,30-44,Graduate
+P051,Social Media,2.9,2,30-44,Graduate
+P051,Print Media,14.6,4,30-44,Graduate
+P051,Podcasts,6.4,3,30-44,Graduate
+P052,TV News,10.4,2,60+,College
+P052,Social Media,13.9,5,60+,College
+P052,Print Media,13.3,1,60+,College
+P052,Podcasts,6.6,6,60+,College
+P053,TV News,2.4,6,45-59,College
+P053,Social Media,2.3,7,45-59,College
+P053,Print Media,10.1,2,45-59,College
+P053,Podcasts,0.1,6,45-59,College
+P054,TV News,7.5,6,45-59,College
+P054,Social Media,4.6,1,45-59,College
+P054,Print Media,6.6,3,45-59,College
+P054,Podcasts,6.1,2,45-59,College
+P055,TV News,10.8,4,60+,College
+P055,Social Media,2.5,6,60+,College
+P055,Print Media,13,7,60+,College
+P055,Podcasts,3.1,3,60+,College
+P056,TV News,4.6,5,30-44,College
+P056,Social Media,8.7,1,30-44,College
+P056,Print Media,6.6,3,30-44,College
+P056,Podcasts,7.8,7,30-44,College
+P057,TV News,12.2,7,60+,Graduate
+P057,Social Media,12,3,60+,Graduate
+P057,Print Media,4.3,1,60+,Graduate
+P057,Podcasts,5.6,5,60+,Graduate
+P058,TV News,10.4,5,45-59,College
+P058,Social Media,10.3,5,45-59,College
+P058,Print Media,0.1,3,45-59,College
+P058,Podcasts,3.7,4,45-59,College
+P059,TV News,2.5,4,30-44,Graduate
+P059,Social Media,9.1,4,30-44,Graduate
+P059,Print Media,3.6,3,30-44,Graduate
+P059,Podcasts,14,1,30-44,Graduate
+P060,TV News,8.7,7,18-29,College
+P060,Social Media,12.5,3,18-29,College
+P060,Print Media,2.9,4,18-29,College
+P060,Podcasts,11.4,4,18-29,College
+P061,TV News,1.5,6,45-59,College
+P061,Social Media,4.2,3,45-59,College
+P061,Print Media,12.6,7,45-59,College
+P061,Podcasts,6.1,4,45-59,College
+P062,TV News,14.8,2,18-29,Graduate
+P062,Social Media,2.3,2,18-29,Graduate
+P062,Print Media,14.2,6,18-29,Graduate
+P062,Podcasts,9.5,6,18-29,Graduate
+P063,TV News,4.9,7,30-44,Graduate
+P063,Social Media,13,7,30-44,Graduate
+P063,Print Media,3.4,4,30-44,Graduate
+P063,Podcasts,1.1,5,30-44,Graduate
+P064,TV News,12.4,3,45-59,High School
+P064,Social Media,13,7,45-59,High School
+P064,Print Media,11.7,2,45-59,High School
+P064,Podcasts,1.3,4,45-59,High School
+P065,TV News,7.8,5,30-44,Graduate
+P065,Social Media,6.7,5,30-44,Graduate
+P065,Print Media,1,6,30-44,Graduate
+P065,Podcasts,5.2,4,30-44,Graduate
+P066,TV News,0.5,1,30-44,Graduate
+P066,Social Media,4.6,4,30-44,Graduate
+P066,Print Media,4.1,7,30-44,Graduate
+P066,Podcasts,2.2,2,30-44,Graduate
+P067,TV News,8.7,3,45-59,Graduate
+P067,Social Media,4.2,5,45-59,Graduate
+P067,Print Media,13.2,4,45-59,Graduate
+P067,Podcasts,6.9,5,45-59,Graduate
+P068,TV News,10.4,1,45-59,High School
+P068,Social Media,2.3,6,45-59,High School
+P068,Print Media,9,7,45-59,High School
+P068,Podcasts,8.3,3,45-59,High School
+P069,TV News,4.6,2,30-44,High School
+P069,Social Media,3.9,1,30-44,High School
+P069,Print Media,5.6,2,30-44,High School
+P069,Podcasts,0.2,5,30-44,High School
+P070,TV News,2.4,4,30-44,Graduate
+P070,Social Media,9.2,4,30-44,Graduate
+P070,Print Media,1.4,4,30-44,Graduate
+P070,Podcasts,11.4,1,30-44,Graduate
+P071,TV News,9.4,7,30-44,Graduate
+P071,Social Media,7.5,3,30-44,Graduate
+P071,Print Media,2.4,6,30-44,Graduate
+P071,Podcasts,6.7,5,30-44,Graduate
+P072,TV News,14.6,1,18-29,Graduate
+P072,Social Media,13.1,1,18-29,Graduate
+P072,Print Media,11.9,5,18-29,Graduate
+P072,Podcasts,4.1,1,18-29,Graduate
+P073,TV News,13.1,3,60+,High School
+P073,Social Media,14.3,7,60+,High School
+P073,Print Media,13.4,6,60+,High School
+P073,Podcasts,11.3,1,60+,High School
+P074,TV News,6.5,5,45-59,High School
+P074,Social Media,1.4,4,45-59,High School
+P074,Print Media,11.6,4,45-59,High School
+P074,Podcasts,3.2,6,45-59,High School
+P075,TV News,14.7,5,60+,High School
+P075,Social Media,8,7,60+,High School
+P075,Print Media,13.9,5,60+,High School
+P075,Podcasts,2.5,5,60+,High School
