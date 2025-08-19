@@ -1,0 +1,456 @@
+---
+title: "Wednesday - Jumpstart 2025: Statistics in R"
+author: "Hannah Overbye-Thompson"
+date: "2025-08-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(tidyverse)
+library(broom)  # For tidy statistical output
+
+# Turn off scientific notation for easier reading
+options(scipen = 999)
+```
+
+# Welcome Back to Jumpstart 2025!
+
+Today we'll learn how to conduct statistical analyses in R using your communication research data. We'll cover the most common statistical tests used in communication.
+
+## Today's Learning Goals:
+- Understand when to use different statistical tests
+- Learn to run and interpret statistical analyses in R
+- Practice with real communication research scenarios
+- Develop skills in hypothesis testing and interpretation
+
+---
+
+# Loading Our Communication Data
+
+Let's start by loading the datasets we'll use for today's analyses:
+
+```{r}
+# Load our communication research datasets
+media_trust <- read_csv(here("data", "media_trust_survey.csv"))
+social_media <- read_csv(here("data", "social_media_engagement.csv"))
+news_consumption <- read_csv(here("data", "news_consumption_patterns.csv"))
+```
+
+## Quick Data Exploration
+
+Before running any statistics, always explore your data first:
+
+```{r}
+# Explore the media trust dataset
+glimpse(media_trust)
+summary(media_trust$trust_score)
+summary(media_trust$age)
+
+# Check for missing values
+sum(is.na(media_trust$trust_score))
+
+# Look at the distribution of categorical variables
+table(media_trust$news_source)
+table(media_trust$gender)
+```
+
+---
+
+# Statistical Tests in Communication Research
+
+## 1. One-Sample t-Test
+
+**When to use:** Test if a sample mean differs from a known population value or theoretical expectation.
+
+**Research Question:** "Do participants' trust scores differ significantly from the scale midpoint (4.0)?"
+
+```{r}
+# One-sample t-test: Is trust score significantly different from midpoint?
+one_sample_result <- t.test(media_trust$trust_score, mu = 4.0)
+one_sample_result
+```
+
+## 2. Independent Samples t-Test
+
+**When to use:** Compare means between two independent groups.
+
+**Research Question:** "Do males and females differ in their trust scores?"
+
+```{r}
+# Filter for just male and female participants
+gender_comparison <- media_trust %>%
+  filter(gender %in% c("Male", "Female"))
+
+# Independent samples t-test
+independent_t_result <- t.test(trust_score ~ gender, data = gender_comparison)
+independent_t_result
+
+# Descriptive statistics by group
+gender_comparison %>%
+  group_by(gender) %>%
+  summarize(
+    mean_trust = mean(trust_score, na.rm = TRUE),
+    sd_trust = sd(trust_score, na.rm = TRUE),
+    n = n()
+  )
+```
+
+## 3. Paired Samples t-Test
+
+**When to use:** Compare two related measurements from the same participants.
+
+**Research Question:** "Do trust scores and credibility ratings differ significantly?"
+
+```{r}
+# Paired samples t-test: trust vs credibility ratings
+paired_t_result <- t.test(media_trust$trust_score, 
+                         media_trust$credibility_rating, 
+                         paired = TRUE) 
+paired_t_result
+
+# Descriptive statistics
+cat("Mean trust score:", round(mean(media_trust$trust_score, na.rm = TRUE), 2), "\n")
+cat("Mean credibility rating:", round(mean(media_trust$credibility_rating, na.rm = TRUE), 2))
+```
+
+## 4. Linear Regression
+
+**When to use:** Predict one continuous variable from another continuous variable.
+
+**Research Question:** "Does age predict trust in news sources?"
+
+```{r}
+# Simple linear regression
+trust_age_model <- lm(trust_score ~ age, data = media_trust)
+summary(trust_age_model)
+```
+
+## 5. Multiple Regression
+
+**When to use:** Predict one variable from multiple predictors.
+
+**Research Question:** "Do age, political interest, and daily news consumption predict trust scores?"
+
+```{r}
+# Multiple regression
+multiple_model <- lm(trust_score ~ age + political_interest + daily_news_minutes, 
+                    data = media_trust)
+
+summary(multiple_model)
+```
+
+## 6. Correlation Analysis
+
+**When to use:** Examine the strength and direction of relationships between variables.
+
+**Research Question:** "How strongly are trust scores and credibility ratings related?"
+
+```{r}
+# Pearson correlation
+correlation_result <- cor.test(media_trust$trust_score, 
+                              media_trust$credibility_rating)
+
+print(correlation_result)
+```
+
+## 7. One-Way ANOVA
+
+**When to use:** Compare means across three or more groups.
+
+**Research Question:** "Do trust scores differ across education levels?"
+
+```{r}
+# One-way ANOVA
+anova_model <- aov(trust_score ~ education, data = media_trust)
+summary(anova_model)
+
+```
+
+## 8. Two-Way ANOVA
+
+**When to use:** Examine effects of two categorical variables and their interaction.
+
+**Research Question:** "Do trust scores vary by gender and education level?"
+
+```{r}
+# Filter for main gender categories for cleaner analysis
+anova_data <- media_trust %>%
+  filter(gender %in% c("Male", "Female")) %>%
+  filter(education %in% c("Bachelor's", "Master's", "PhD"))
+
+# Two-way ANOVA
+twoway_model <- aov(trust_score ~ gender * education, data = anova_data)
+summary(twoway_model)
+
+# Means by group
+anova_data %>%
+  group_by(gender, education) %>%
+  summarize(
+    mean_trust = mean(trust_score, na.rm = TRUE),
+    n = n(),
+    .groups = 'drop'
+  )
+```
+
+## 9. Chi-Square Goodness of Fit
+
+**When to use:** Test if observed frequencies match expected frequencies.
+
+**Research Question:** "Are news sources equally preferred among participants?"
+
+```{r}
+# Chi-square goodness of fit test
+news_source_table <- table(media_trust$news_source)
+news_source_table
+
+chisq_goodness <- chisq.test(news_source_table)
+chisq_goodness
+
+
+# Expected vs observed frequencies
+data.frame(
+  News_Source = names(news_source_table),
+  Observed = as.numeric(news_source_table),
+  Expected = round(chisq_goodness$expected, 1)
+)
+```
+
+## 10. Chi-Square Test of Independence
+
+**When to use:** Test if two categorical variables are independent.
+
+**Research Question:** "Is there an association between gender and preferred news source?"
+
+```{r}
+# Create contingency table
+contingency_table <- table(media_trust$gender, media_trust$news_source)
+contingency_table
+
+# Chi-square test of independence
+chisq_independence <- chisq.test(contingency_table)
+chisq_independence
+
+```
+
+## 11. Logistic Regression
+
+**When to use:** Predict a binary outcome from one or more predictors.
+
+**Research Question:** "What factors predict high trust (above median) in news sources?"
+
+```{r}
+# Create binary outcome variable
+media_trust <- media_trust %>%
+  mutate(high_trust = ifelse(trust_score > median(trust_score, na.rm = TRUE), 1, 0))
+
+# Logistic regression
+logistic_model <- glm(high_trust ~ age + political_interest + daily_news_minutes, 
+                     data = media_trust, 
+                     family = binomial)
+
+summary(logistic_model)
+```
+
+---
+
+# Practice Exercises: Your Turn!
+
+Now it's time to practice with our social media engagement dataset!
+
+## Data Exploration (Always Start Here!)
+
+```{r}
+# Explore the social media dataset
+glimpse(social_media)
+
+# Your task: Calculate descriptive statistics for 3 variables
+# 1. One continuous variable (e.g., engagement_score)
+# 2. One categorical variable (e.g., platform)
+# 3. One of your choice
+
+# Your code here:
+
+
+
+
+```
+
+## Exercise 1: Independent Samples t-Test
+
+**Research Question:** "Do users who post frequently (>4 posts/week) have different engagement scores than those who post less frequently?"
+
+```{r}
+# Step 1: Create a binary grouping variable
+# Step 2: Run an independent samples t-test
+# Step 3: Calculate descriptive statistics by group
+
+# Your code here:
+
+
+
+
+```
+
+## Exercise 2: Correlation Analysis
+
+**Research Question:** "What is the relationship between daily hours spent on social media and engagement scores?"
+
+```{r}
+# Step 1: Run a correlation test
+
+# Your code here:
+
+
+
+
+```
+
+## Exercise 3: One-Way ANOVA
+
+**Research Question:** "Do engagement scores differ significantly across social media platforms?"
+
+```{r}
+# Step 1: Run a one-way ANOVA
+# Step 2: Calculate descriptive statistics by platform
+
+# Your code here:
+
+
+
+
+```
+
+## Exercise 4: Linear Regression
+
+**Research Question:** "Does follower count predict engagement scores?"
+
+```{r}
+# Step 1: Run a simple linear regression
+# Step 2: Examine model fit statistics
+
+# Your code here:
+
+
+
+
+```
+
+## Exercise 5: Chi-Square Test
+
+**Research Question:** "Is there an association between platform type and news sharing frequency (high vs. low)?"
+
+```{r}
+# Step 1: Create a binary news sharing variable (above/below median)
+# Step 2: Create a contingency table
+# Step 3: Run a chi-square test of independence
+
+# Your code here:
+
+
+
+
+```
+
+## Exercise 6: Multiple Regression
+
+**Research Question:** "What combination of factors (age, daily hours, follower count) best predicts engagement scores?"
+
+```{r}
+# Step 1: Run a multiple regression
+# Step 2: Examine which predictors are significant
+
+# Your code here:
+
+
+
+
+```
+
+## Exercise 7: Advanced Challenge
+
+**Research Question:** Design your own analysis! Choose variables from any of our datasets and:
+
+1. State a clear research question
+2. Choose the appropriate statistical test
+3. Run the analysis
+4. Interpret the results
+
+```{r}
+# Your research question: 
+
+
+# Justification for your chosen test:
+
+
+# Your analysis:
+
+
+
+
+# Your interpretation:
+
+
+
+
+```
+
+---
+
+# Interpreting Statistical Results
+
+## Key Guidelines for Communication Research:
+
+### P-values:
+- **p < 0.001**: Very strong evidence against null hypothesis
+- **p < 0.01**: Strong evidence against null hypothesis  
+- **p < 0.05**: Moderate evidence against null hypothesis
+- **p ≥ 0.05**: Insufficient evidence to reject null hypothesis
+
+### Effect Sizes:
+- **Cohen's d** (t-tests): 0.2 (small), 0.5 (medium), 0.8 (large)
+- **R-squared** (regression): % of variance explained
+- **Eta-squared** (ANOVA): proportion of variance explained
+- **Cramér's V** (chi-square): 0.1 (small), 0.3 (medium), 0.5 (large)
+
+### Reporting Results:
+Always include:
+1. Descriptive statistics (means, standard deviations)
+2. Test statistic and degrees of freedom
+3. P-value
+4. Effect size
+5. Confidence intervals when appropriate
+
+---
+
+# Best Practices for Statistical Analysis
+
+## Before Running Tests:
+1. **Explore your data** - check distributions, outliers, missing values
+2. **Check assumptions** - normality, homogeneity of variance, independence
+3. **Visualize relationships** - scatter plots, box plots, histograms (we'll go over this tomorrow!)
+
+## During Analysis:
+1. **Use appropriate tests** - match the test to your research question and data type
+2. **Consider effect sizes** - statistical significance ≠ practical significance
+3. **Check residuals** - especially for regression models
+
+## After Analysis:
+1. **Interpret results substantively** - what do they mean for your research question?
+2. **Consider limitations** - sample size, generalizability, causation vs. correlation
+3. **Report transparently** - include all relevant statistics and confidence intervals
+
+---
+
+# Next Steps
+
+Excellent work! You've now learned:
+
+✅ **Tuesday:** R basics and data manipulation  
+✅ **Wednesday:** Statistical analysis in R with communication data  
+
+## What's Coming:
+- **Thursday:** Data visualization with ggplot2
+
+Great job building your statistical analysis skills in R! 🎉
