@@ -14,6 +14,7 @@ set.seed(2025)
 
 # Dataset 1: Media Trust Survey (for Part 2 examples)
 # Simulates a survey about trust in different news sources
+# Creates realistic correlation between age and trust
 
 n_participants <- 250
 
@@ -27,18 +28,24 @@ media_trust_survey <- tibble(
   news_source = sample(c("Television", "Newspapers", "Facebook", "Instagram", 
                          "Twitter", "YouTube", "Podcasts", "Online News Sites"), 
                        n_participants, replace = TRUE),
-  trust_score = round(rnorm(n_participants, mean = 4.2, sd = 1.8), 1),
-  credibility_rating = round(rnorm(n_participants, mean = 5.1, sd = 1.5), 1),
   daily_news_minutes = round(runif(n_participants, min = 5, max = 180)),
   political_interest = sample(1:7, n_participants, replace = TRUE, prob = c(0.05, 0.08, 0.12, 0.25, 0.25, 0.15, 0.10)),
   income_bracket = sample(c("Under $25k", "$25k-$50k", "$50k-$75k", "$75k-$100k", "Over $100k"), 
                           n_participants, replace = TRUE)
 ) %>%
-  # Ensure trust_score and credibility_rating are within realistic bounds
+  # Create trust_score that correlates with age (older = higher trust)
+  # Using a moderate positive correlation (r ≈ 0.35)
   mutate(
-    trust_score = pmax(1, pmin(7, trust_score)),
-    credibility_rating = pmax(1, pmin(7, credibility_rating))
-  )
+    # Base trust score influenced by age
+    trust_score_base = 2.5 + (age - 18) * 0.04 + rnorm(n_participants, 0, 1.2),
+    trust_score = round(pmax(1, pmin(7, trust_score_base)), 1),
+    
+    # Credibility rating also slightly correlated with trust score
+    credibility_rating_base = trust_score + rnorm(n_participants, 0.5, 1.0),
+    credibility_rating = round(pmax(1, pmin(7, credibility_rating_base)), 1)
+  ) %>%
+  # Remove intermediate variables
+  select(-trust_score_base, -credibility_rating_base)
 
 # Write to CSV
 write_csv(media_trust_survey, here("data", "media_trust_survey.csv"))

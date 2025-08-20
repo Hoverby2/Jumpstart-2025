@@ -384,7 +384,7 @@ media_trust &lt;- read_csv(here(&quot;data&quot;, &quot;media_trust_survey.csv&q
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (5): participant_id, gender, education, news_source, income_bracket
-## dbl (5): age, trust_score, credibility_rating, daily_news_minutes, political...
+## dbl (5): age, daily_news_minutes, political_interest, trust_score, credibili...
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -418,14 +418,14 @@ glimpse(media_trust)</code></pre>
 ## $ gender             &lt;chr&gt; &quot;Female&quot;, &quot;Female&quot;, &quot;Male&quot;, &quot;Prefer not to say&quot;, &quot;F…
 ## $ education          &lt;chr&gt; &quot;Bachelor&#39;s&quot;, &quot;Bachelor&#39;s&quot;, &quot;Bachelor&#39;s&quot;, &quot;High Sch…
 ## $ news_source        &lt;chr&gt; &quot;Facebook&quot;, &quot;Online News Sites&quot;, &quot;Online News Sites…
-## $ trust_score        &lt;dbl&gt; 4.7, 7.0, 3.2, 2.7, 4.2, 5.3, 2.4, 5.3, 2.9, 4.3, 5…
-## $ credibility_rating &lt;dbl&gt; 3.4, 1.0, 5.0, 3.5, 4.8, 7.0, 5.1, 4.9, 5.6, 4.3, 4…
-## $ daily_news_minutes &lt;dbl&gt; 38, 139, 93, 40, 7, 144, 82, 92, 148, 122, 137, 86,…
-## $ political_interest &lt;dbl&gt; 5, 6, 4, 5, 5, 7, 5, 7, 4, 4, 6, 2, 6, 6, 7, 5, 6, …
-## $ income_bracket     &lt;chr&gt; &quot;$75k-$100k&quot;, &quot;$75k-$100k&quot;, &quot;Under $25k&quot;, &quot;$25k-$50…</code></pre>
+## $ daily_news_minutes &lt;dbl&gt; 112, 75, 169, 114, 55, 29, 42, 177, 91, 170, 133, 1…
+## $ political_interest &lt;dbl&gt; 5, 3, 3, 4, 3, 5, 2, 2, 4, 4, 5, 5, 4, 3, 4, 1, 5, …
+## $ income_bracket     &lt;chr&gt; &quot;$75k-$100k&quot;, &quot;Under $25k&quot;, &quot;$75k-$100k&quot;, &quot;Under $2…
+## $ trust_score        &lt;dbl&gt; 1.5, 1.0, 4.7, 3.3, 2.5, 5.0, 4.7, 4.3, 4.7, 7.0, 3…
+## $ credibility_rating &lt;dbl&gt; 3.1, 1.0, 6.4, 5.0, 4.1, 7.0, 5.7, 6.4, 4.8, 7.0, 3…</code></pre>
 <pre class="r"><code>summary(media_trust$trust_score)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   1.000   3.125   4.300   4.226   5.375   7.000</code></pre>
+##   1.000   2.725   3.700   3.702   4.700   7.000</code></pre>
 <pre class="r"><code>summary(media_trust$age)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   18.00   33.00   47.00   47.38   62.75   75.00</code></pre>
@@ -461,13 +461,13 @@ one_sample_result</code></pre>
 ##  One Sample t-test
 ## 
 ## data:  media_trust$trust_score
-## t = 2.1946, df = 249, p-value = 0.02912
+## t = -3.34, df = 249, p-value = 0.0009661
 ## alternative hypothesis: true mean is not equal to 4
 ## 95 percent confidence interval:
-##  4.023219 4.429581
+##  3.526913 3.877887
 ## sample estimates:
 ## mean of x 
-##    4.2264</code></pre>
+##    3.7024</code></pre>
 </div>
 <div id="independent-samples-t-test" class="section level2">
 <h2>2. Independent Samples t-Test</h2>
@@ -486,13 +486,13 @@ independent_t_result</code></pre>
 ##  Welch Two Sample t-test
 ## 
 ## data:  trust_score by gender
-## t = 1.1222, df = 218.28, p-value = 0.263
+## t = -0.23128, df = 223.21, p-value = 0.8173
 ## alternative hypothesis: true difference in means between group Female and group Male is not equal to 0
 ## 95 percent confidence interval:
-##  -0.1849451  0.6740890
+##  -0.4146033  0.3275065
 ## sample estimates:
 ## mean in group Female   mean in group Male 
-##             4.328226             4.083654</code></pre>
+##             3.681452             3.725000</code></pre>
 <pre class="r"><code># Descriptive statistics by group
 gender_comparison %&gt;%
   group_by(gender) %&gt;%
@@ -504,8 +504,8 @@ gender_comparison %&gt;%
 <pre><code>## # A tibble: 2 × 4
 ##   gender mean_trust sd_trust     n
 ##   &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
-## 1 Female       4.33     1.63   124
-## 2 Male         4.08     1.65   104</code></pre>
+## 1 Female       3.68     1.47   124
+## 2 Male         3.72     1.37   104</code></pre>
 </div>
 <div id="paired-samples-t-test" class="section level2">
 <h2>3. Paired Samples t-Test</h2>
@@ -522,18 +522,18 @@ paired_t_result</code></pre>
 ##  Paired t-test
 ## 
 ## data:  media_trust$trust_score and media_trust$credibility_rating
-## t = -5.6736, df = 249, p-value = 0.00000003872
+## t = -9.795, df = 249, p-value &lt; 0.00000000000000022
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -1.0178999 -0.4933001
+##  -0.6750046 -0.4489954
 ## sample estimates:
 ## mean of the differences 
-##                 -0.7556</code></pre>
+##                  -0.562</code></pre>
 <pre class="r"><code># Descriptive statistics
 cat(&quot;Mean trust score:&quot;, round(mean(media_trust$trust_score, na.rm = TRUE), 2), &quot;\n&quot;)</code></pre>
-<pre><code>## Mean trust score: 4.23</code></pre>
+<pre><code>## Mean trust score: 3.7</code></pre>
 <pre class="r"><code>cat(&quot;Mean credibility rating:&quot;, round(mean(media_trust$credibility_rating, na.rm = TRUE), 2))</code></pre>
-<pre><code>## Mean credibility rating: 4.98</code></pre>
+<pre><code>## Mean credibility rating: 4.26</code></pre>
 </div>
 <div id="linear-regression" class="section level2">
 <h2>4. Linear Regression</h2>
@@ -550,18 +550,18 @@ summary(trust_age_model)</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -3.3847 -1.1086  0.1239  1.1410  2.9496 
+## -2.5913 -0.8067 -0.0751  0.7316  4.1572 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value            Pr(&gt;|t|)    
-## (Intercept) 3.921781   0.310375  12.636 &lt;0.0000000000000002 ***
-## age         0.006430   0.006179   1.041               0.299    
+##             Estimate Std. Error t value             Pr(&gt;|t|)    
+## (Intercept) 1.486181   0.223410   6.652       0.000000000183 ***
+## age         0.046779   0.004448  10.518 &lt; 0.0000000000000002 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.631 on 248 degrees of freedom
-## Multiple R-squared:  0.004347,   Adjusted R-squared:  0.0003326 
-## F-statistic: 1.083 on 1 and 248 DF,  p-value: 0.2991</code></pre>
+## Residual standard error: 1.174 on 248 degrees of freedom
+## Multiple R-squared:  0.3085, Adjusted R-squared:  0.3057 
+## F-statistic: 110.6 on 1 and 248 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
 <div id="multiple-regression" class="section level2">
 <h2>5. Multiple Regression</h2>
@@ -580,21 +580,21 @@ summary(multiple_model)</code></pre>
 ##     data = media_trust)
 ## 
 ## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -3.470 -1.149  0.102  1.173  3.160 
+##     Min      1Q  Median      3Q     Max 
+## -2.5816 -0.7754 -0.0473  0.6651  3.8970 
 ## 
 ## Coefficients:
-##                     Estimate Std. Error t value         Pr(&gt;|t|)    
-## (Intercept)         3.635532   0.495392   7.339 0.00000000000313 ***
-## age                 0.006952   0.006210   1.120            0.264    
-## political_interest -0.008037   0.067840  -0.118            0.906    
-## daily_news_minutes  0.003229   0.002029   1.592            0.113    
+##                     Estimate Std. Error t value             Pr(&gt;|t|)    
+## (Intercept)         1.222122   0.324560   3.765             0.000208 ***
+## age                 0.046701   0.004419  10.569 &lt; 0.0000000000000002 ***
+## political_interest -0.012244   0.048279  -0.254             0.800017    
+## daily_news_minutes  0.003386   0.001427   2.373             0.018431 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.629 on 246 degrees of freedom
-## Multiple R-squared:  0.0145, Adjusted R-squared:  0.002485 
-## F-statistic: 1.207 on 3 and 246 DF,  p-value: 0.3079</code></pre>
+## Residual standard error: 1.165 on 246 degrees of freedom
+## Multiple R-squared:  0.324,  Adjusted R-squared:  0.3158 
+## F-statistic:  39.3 on 3 and 246 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
 <div id="correlation-analysis" class="section level2">
 <h2>6. Correlation Analysis</h2>
@@ -611,13 +611,13 @@ print(correlation_result)</code></pre>
 ##  Pearson&#39;s product-moment correlation
 ## 
 ## data:  media_trust$trust_score and media_trust$credibility_rating
-## t = -0.24579, df = 248, p-value = 0.806
+## t = 22.542, df = 248, p-value &lt; 0.00000000000000022
 ## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
-##  -0.1394029  0.1086716
+##  0.7744684 0.8567024
 ## sample estimates:
-##         cor 
-## -0.01560578</code></pre>
+##       cor 
+## 0.8197672</code></pre>
 </div>
 <div id="one-way-anova" class="section level2">
 <h2>7. One-Way ANOVA</h2>
@@ -629,8 +629,8 @@ education levels?”</p>
 anova_model &lt;- aov(trust_score ~ education, data = media_trust)
 summary(anova_model)</code></pre>
 <pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)
-## education     4    1.9  0.4792   0.178   0.95
-## Residuals   245  660.6  2.6962</code></pre>
+## education     4    7.2   1.808    0.91  0.459
+## Residuals   245  487.0   1.988</code></pre>
 </div>
 <div id="two-way-anova" class="section level2">
 <h2>8. Two-Way ANOVA</h2>
@@ -647,10 +647,10 @@ anova_data &lt;- media_trust %&gt;%
 twoway_model &lt;- aov(trust_score ~ gender * education, data = anova_data)
 summary(twoway_model)</code></pre>
 <pre><code>##                   Df Sum Sq Mean Sq F value Pr(&gt;F)
-## gender             1    1.7  1.6627   0.597  0.441
-## education          2    0.3  0.1614   0.058  0.944
-## gender:education   2    1.0  0.5122   0.184  0.832
-## Residuals        132  367.8  2.7862</code></pre>
+## gender             1   4.00   4.003   1.713  0.193
+## education          2   1.83   0.913   0.391  0.677
+## gender:education   2   4.57   2.286   0.978  0.379
+## Residuals        132 308.46   2.337</code></pre>
 <pre class="r"><code># Means by group
 anova_data %&gt;%
   group_by(gender, education) %&gt;%
@@ -662,12 +662,12 @@ anova_data %&gt;%
 <pre><code>## # A tibble: 6 × 4
 ##   gender education  mean_trust     n
 ##   &lt;chr&gt;  &lt;chr&gt;           &lt;dbl&gt; &lt;int&gt;
-## 1 Female Bachelor&#39;s       4.30    42
-## 2 Female Master&#39;s         4.17    26
-## 3 Female PhD              4.24     8
-## 4 Male   Bachelor&#39;s       3.91    31
-## 5 Male   Master&#39;s         4.11    19
-## 6 Male   PhD              4.23    12</code></pre>
+## 1 Female Bachelor&#39;s       3.45    42
+## 2 Female Master&#39;s         3.51    26
+## 3 Female PhD              3.82     8
+## 4 Male   Bachelor&#39;s       4.13    31
+## 5 Male   Master&#39;s         3.46    19
+## 6 Male   PhD              3.74    12</code></pre>
 </div>
 <div id="chi-square-goodness-of-fit" class="section level2">
 <h2>9. Chi-Square Goodness of Fit</h2>
@@ -760,23 +760,25 @@ summary(logistic_model)</code></pre>
 ##     family = binomial, data = media_trust)
 ## 
 ## Deviance Residuals: 
-##    Min      1Q  Median      3Q     Max  
-## -1.293  -1.139  -1.023   1.204   1.351  
+##     Min       1Q   Median       3Q      Max  
+## -2.1093  -0.7766  -0.3695   0.7885   2.1827  
 ## 
 ## Coefficients:
-##                     Estimate Std. Error z value Pr(&gt;|z|)
-## (Intercept)        -0.720181   0.613373  -1.174    0.240
-## age                 0.004726   0.007661   0.617    0.537
-## political_interest  0.037775   0.083728   0.451    0.652
-## daily_news_minutes  0.002459   0.002506   0.981    0.326
+##                     Estimate Std. Error z value          Pr(&gt;|z|)    
+## (Intercept)        -4.218436   0.744029  -5.670 0.000000014303426 ***
+## age                 0.080067   0.010512   7.617 0.000000000000026 ***
+## political_interest -0.115828   0.100501  -1.153           0.24911    
+## daily_news_minutes  0.008773   0.003051   2.876           0.00403 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
-##     Null deviance: 346.00  on 249  degrees of freedom
-## Residual deviance: 344.51  on 246  degrees of freedom
-## AIC: 352.51
+##     Null deviance: 346.32  on 249  degrees of freedom
+## Residual deviance: 259.60  on 246  degrees of freedom
+## AIC: 267.6
 ## 
-## Number of Fisher Scoring iterations: 3</code></pre>
+## Number of Fisher Scoring iterations: 4</code></pre>
 <hr />
 </div>
 </div>
@@ -791,15 +793,15 @@ glimpse(social_media)</code></pre>
 <pre><code>## Rows: 300
 ## Columns: 10
 ## $ user_id                &lt;chr&gt; &quot;U001&quot;, &quot;U002&quot;, &quot;U003&quot;, &quot;U004&quot;, &quot;U005&quot;, &quot;U006&quot;,…
-## $ age                    &lt;dbl&gt; 27, 59, 39, 35, 32, 24, 35, 21, 64, 25, 53, 27,…
-## $ platform               &lt;chr&gt; &quot;LinkedIn&quot;, &quot;Instagram&quot;, &quot;Facebook&quot;, &quot;Instagram…
-## $ daily_hours            &lt;dbl&gt; 4.0, 5.1, 6.0, 6.8, 3.8, 5.0, 5.8, 7.2, 6.5, 5.…
-## $ posts_per_week         &lt;dbl&gt; 4, 6, 5, 2, 1, 3, 8, 6, 7, 2, 6, 5, 4, 2, 2, 6,…
-## $ engagement_score       &lt;dbl&gt; 92.0, 43.2, 44.9, 84.4, 55.0, 60.4, 55.2, 50.1,…
-## $ follower_count         &lt;dbl&gt; 204, 1128, 4319, 459, 44, 118, 4003, 161, 195, …
-## $ political_posts_week   &lt;dbl&gt; 2, 2, 2, 2, 1, 1, 1, 3, 1, 3, 0, 2, 0, 3, 3, 1,…
-## $ news_sharing_frequency &lt;dbl&gt; 3, 4, 3, 1, 4, 1, 2, 3, 2, 5, 1, 2, 1, 2, 3, 4,…
-## $ platform_satisfaction  &lt;dbl&gt; 6, 2, 2, 3, 2, 4, 4, 5, 5, 4, 4, 5, 3, 6, 4, 4,…</code></pre>
+## $ age                    &lt;dbl&gt; 44, 31, 52, 64, 22, 54, 28, 54, 41, 26, 51, 27,…
+## $ platform               &lt;chr&gt; &quot;Instagram&quot;, &quot;Facebook&quot;, &quot;Facebook&quot;, &quot;Facebook&quot;…
+## $ daily_hours            &lt;dbl&gt; 5.9, 4.6, 3.5, 0.4, 7.0, 4.5, 2.2, 2.6, 2.1, 6.…
+## $ posts_per_week         &lt;dbl&gt; 5, 1, 9, 6, 4, 3, 3, 4, 4, 3, 2, 2, 1, 5, 6, 1,…
+## $ engagement_score       &lt;dbl&gt; 100.0, 51.0, 78.7, 100.0, 49.9, 72.3, 32.3, 82.…
+## $ follower_count         &lt;dbl&gt; 65, 24, 366, 5555, 11, 17, 32, 2708, 1265, 25, …
+## $ political_posts_week   &lt;dbl&gt; 1, 3, 2, 3, 2, 2, 3, 1, 3, 0, 1, 2, 0, 2, 3, 0,…
+## $ news_sharing_frequency &lt;dbl&gt; 2, 2, 2, 2, 4, 1, 1, 1, 2, 4, 2, 4, 2, 2, 3, 1,…
+## $ platform_satisfaction  &lt;dbl&gt; 3, 5, 6, 5, 4, 5, 4, 4, 5, 7, 4, 5, 3, 4, 4, 5,…</code></pre>
 <pre class="r"><code># Your task: Calculate descriptive statistics for 3 variables
 # 1. One continuous variable (e.g., engagement_score)
 # 2. One categorical variable (e.g., platform)

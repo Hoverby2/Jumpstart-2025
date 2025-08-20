@@ -1,0 +1,575 @@
+---
+title: "Thursday - Jumpstart 2025: Data Visualization"
+author: "Hannah Overbye-Thompson"
+date: "2025-08-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(here)
+library(tidyverse)
+library(ggplot2)
+```
+
+# The Power of Data Visualization in Research
+
+Welcome to data visualization! Today you'll learn to create compelling, publication-ready visualizations that communicate your research findings effectively.
+
+## Why Data Visualization Matters
+
+Data visualization is crucial for communication researchers because it allows us to:
+
+-   **Communicate findings** to academic and public audiences
+-   **Identify patterns** and trends in complex datasets\
+-   **Spot outliers** and unexpected relationships
+-   **Compare groups** and experimental conditions
+-   **Tell stories** with data that support theoretical arguments
+
+## Today's Learning Goals:
+
+-   Introduce the grammar of graphics with ggplot2
+-   Create publication-ready visualizations for communication research
+-   Learn best practices for academic data visualization
+-   Practice!
+
+------------------------------------------------------------------------
+
+# Loading Our Data
+
+```{r}
+# Load our communication datasets
+media_trust <- read_csv(here("data", "media_trust_survey.csv"))
+social_media <- read_csv(here("data", "social_media_engagement.csv"))
+news_consumption <- read_csv(here("data", "news_consumption_patterns.csv"))
+
+# Quick peek at our data
+glimpse(media_trust)
+```
+
+------------------------------------------------------------------------
+
+# The Grammar of Graphics: ggplot2 Fundamentals
+
+ggplot2 works on the principle of "grammar of graphics" - building visualizations layer by layer. Think of it like constructing a sentence with specific grammatical rules (see more [here](https://ggplot2-book.org/mastery.html) 🔗)
+
+## Basic Structure
+
+Every ggplot has three essential components: 1. **Data** - your dataset 2. **Aesthetics (aes)** - what variables to plot and how 3. **Geometries (geom)** - the type of plot
+
+```{r}
+# Start with an empty plot canvas
+ggplot(data = media_trust)
+```
+
+```{r}
+# Add aesthetic mappings (but still no visual elements)
+ggplot(data = media_trust, aes(x = age, y = trust_score))
+```
+
+```{r}
+# Add a geometry to actually see the data
+ggplot(data = media_trust, aes(x = age, y = trust_score)) +
+  geom_point()
+```
+
+------------------------------------------------------------------------
+
+# Essential Plot Types for Communication Research
+
+## 1. Scatter Plots: Exploring Relationships
+
+**When to use:** Examining relationships between two continuous variables
+
+**Research Example:** "How does age relate to trust in news sources?"
+
+```{r}
+# Basic scatter plot
+ggplot(media_trust, aes(x = age, y = trust_score)) +
+  geom_point()
+```
+
+### Adding Layers and Aesthetics
+
+```{r}
+# Add color by news source and a trend line
+ggplot(media_trust, aes(x = age, y = trust_score)) +
+  geom_point(aes(color = news_source), alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE, color = "black") +
+  labs(
+    title = "Age and Trust in News Sources",
+    subtitle = "Higher trust scores indicate greater trust in news media",
+    x = "Age (years)",
+    y = "Trust Score (1-7 scale)",
+    color = "News Source"
+  ) +
+  theme_minimal()
+```
+
+### Publication-Ready Styling
+
+```{r}
+# Professional academic plot
+ggplot(media_trust, aes(x = age, y = trust_score)) +
+  geom_point(aes(color = news_source), alpha = 0.6, size = 1.5) +
+  geom_smooth(method = "lm", se = TRUE, color = "darkblue", linewidth = 1.2) +
+  scale_color_brewer(type = "qual", palette = "Set2") +
+  labs(
+    title = "Relationship Between Age and News Trust Across Media Sources",
+    x = "Participant Age",
+    y = "Trust Score",
+    color = "Primary News Source",
+    caption = "Data: Media Trust Survey 2025 (N = 250)"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_text(face = "bold")
+  )
+```
+
+## 2. Bar Plots: Comparing Categories
+
+**When to use:** Comparing frequencies or means across categorical variables
+
+### Simple Frequency Bar Plot
+
+```{r}
+# Count of participants by news source
+ggplot(media_trust, aes(x = news_source)) +
+  geom_bar(fill = "steelblue", alpha = 0.8) +
+  labs(
+    title = "Distribution of Primary News Sources",
+    x = "News Source",
+    y = "Number of Participants"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Column Plot with Calculated Means
+
+```{r}
+# Calculate mean trust by news source
+trust_by_source <- media_trust %>%
+  group_by(news_source) %>%
+  summarize(
+    mean_trust = mean(trust_score, na.rm = TRUE),
+    se_trust = sd(trust_score, na.rm = TRUE) / sqrt(n()),
+    .groups = 'drop'
+  )
+
+# Create column plot with error bars
+ggplot(trust_by_source, aes(x = reorder(news_source, mean_trust), y = mean_trust)) +
+  geom_col(fill = "darkblue", alpha = 0.7) +
+  geom_errorbar(aes(ymin = mean_trust - se_trust, ymax = mean_trust + se_trust), 
+                width = 0.2, alpha = 0.8) +
+  labs(
+    title = "Mean Trust Scores by News Source",
+    x = "News Source",
+    y = "Mean Trust Score",
+    caption = "Error bars represent standard error"
+  ) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## 3. Histograms: Understanding Distributions
+
+**When to use:** Examining the distribution of a single continuous variable
+
+```{r}
+# Distribution of trust scores
+ggplot(media_trust, aes(x = trust_score)) +
+  geom_histogram(bins = 20, fill = "lightblue", color = "black", alpha = 0.7) +
+  geom_vline(aes(xintercept = mean(trust_score, na.rm = TRUE)), 
+             color = "red", linetype = "dashed", linewidth = 1) +
+  labs(
+    title = "Distribution of News Trust Scores",
+    subtitle = "Red line indicates sample mean",
+    x = "Trust Score",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+```
+
+### Comparing Distributions by Group
+
+```{r}
+# Overlapping histograms by gender
+ggplot(media_trust %>% 
+         filter(gender %in% c("Male", "Female")), 
+       aes(x = trust_score, fill = gender)) +
+  geom_histogram(bins = 15, alpha = 0.6, position = "identity") +
+  scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink")) +
+  labs(
+    title = "Distribution of Trust Scores by Gender",
+    x = "Trust Score",
+    y = "Frequency",
+    fill = "Gender"
+  ) +
+  theme_minimal()
+```
+
+## 4. Box Plots: Comparing Group Distributions
+
+**When to use:** Comparing distributions across multiple groups
+
+```{r}
+# Trust scores by education level
+ggplot(media_trust, aes(x = education, y = trust_score)) +
+  geom_boxplot(aes(fill = education), alpha = 0.7) +
+  scale_fill_brewer(type = "qual", palette = "Pastel1") +
+  labs(
+    title = "Trust Score Distributions by Education Level",
+    x = "Education Level",
+    y = "Trust Score"
+  ) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"  # Remove redundant legend
+  )
+```
+
+## 5. Faceted Plots: Multiple Subplots
+
+**When to use:** Comparing patterns across different groups or conditions
+
+```{r}
+# Scatter plot faceted by news source
+ggplot(media_trust, aes(x = age, y = trust_score)) +
+  geom_point(alpha = 0.6, color = "darkblue") +
+  geom_smooth(method = "lm", se = TRUE) +
+  facet_wrap(~news_source, ncol = 3) +
+  labs(
+    title = "Age-Trust Relationship Across News Sources",
+    x = "Age",
+    y = "Trust Score"
+  ) +
+  theme_minimal() +
+  theme(strip.text = element_text(face = "bold"))
+```
+
+## 6. Advanced: Violin Plots and Other Distributions
+
+```{r}
+# Violin plot for rich distribution visualization
+ggplot(media_trust, aes(x = education, y = trust_score, fill = education)) +
+  geom_violin(alpha = 0.7) +
+  geom_boxplot(width = 0.1, alpha = 0.8) +
+  scale_fill_viridis_d() +
+  labs(
+    title = "Trust Score Distributions by Education (Violin Plot)",
+    subtitle = "Violin shape shows distribution density, box shows quartiles",
+    x = "Education Level",
+    y = "Trust Score"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  )
+```
+
+------------------------------------------------------------------------
+
+# Creating Academic-Quality Visualizations
+
+## Best Practices for Publication
+
+### 1. Clear Titles and Labels
+
+```{r}
+# Example of proper academic labeling
+ggplot(media_trust, aes(x = political_interest, y = trust_score)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Political Interest and Trust in News Media",
+    subtitle = "Linear relationship between political engagement and media trust",
+    x = "Political Interest (1 = Not at all interested, 7 = Very interested)",
+    y = "News Trust Score (1 = Very low trust, 7 = Very high trust)",
+    caption = "Source: Media Trust Survey 2025; N = 250; r = .34, p < .001"
+  ) +
+  theme_classic()
+```
+
+### 2. Appropriate Color Schemes
+
+```{r}
+# Using colorblind-friendly palette
+ggplot(media_trust, aes(x = age, y = trust_score, color = gender)) +
+  geom_point(alpha = 0.7) +
+  scale_color_viridis_d(option = "plasma", end = 0.8) +  # Colorblind friendly
+  labs(
+    title = "Age, Gender, and News Trust",
+    x = "Age",
+    y = "Trust Score",
+    color = "Gender"
+  ) +
+  theme_minimal()
+```
+
+### 3. Professional Themes
+
+```{r}
+# Custom theme for consistency
+academic_theme <- theme_classic() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    legend.title = element_text(size = 11, face = "bold"),
+    legend.text = element_text(size = 10),
+    panel.grid.major = element_line(color = "gray90", linewidth = 0.5),
+    panel.grid.minor = element_blank()
+  )
+
+# Apply to a plot
+ggplot(media_trust, aes(x = daily_news_minutes, y = trust_score)) +
+  geom_point(alpha = 0.6, color = "darkblue") +
+  geom_smooth(method = "lm", color = "red") +
+  labs(
+    title = "Daily News Consumption and Trust Levels",
+    x = "Daily News Consumption (minutes)",
+    y = "Trust Score"
+  ) +
+  academic_theme
+```
+
+------------------------------------------------------------------------
+
+# Practice Exercises with mtcars Dataset
+
+Now let's practice with the classic `mtcars` dataset to reinforce these concepts! Here is a [cheat sheet](https://posit.co/wp-content/uploads/2022/10/data-visualization-1.pdf) to help.
+
+If you need help, please put up your red sticky note.
+
+```{r}
+# Load the mtcars dataset
+data("mtcars")
+
+# Convert cylinder count to a factor for better plotting
+mtcars$cyl <- as.factor(mtcars$cyl)
+
+# Quick exploration
+glimpse(mtcars)
+```
+
+## Exercise 1: Basic Scatter Plot
+
+Create a scatter plot examining the relationship between weight (`wt`) and fuel efficiency (`mpg`):
+
+### 1a. Basic scatter plot
+
+```{r}
+# Your turn: Create a basic scatter plot with wt on x-axis and mpg on y-axis
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point()
+```
+
+### 1b. Add color by cylinder count
+
+```{r}
+# Add color coding by number of cylinders
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point(aes(color = cyl), size = 2)
+```
+
+### 1c. Add trend line
+
+```{r}
+# Add a regression line to show the overall relationship
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point(aes(color = cyl), size = 2) +
+  geom_smooth(method = "lm", se = TRUE, color = "black")
+```
+
+### 1d. Professional labels and styling
+
+```{r}
+# Your code here: Add proper titles, labels, and professional styling
+
+```
+
+### 1e. Interpretation
+
+**Write a brief interpretation of your plot here:**
+
+*[Your interpretation of the weight-mpg relationship]*
+
+## Exercise 2: Bar Plot of Cylinder Distribution
+
+```{r}
+# Create a bar plot showing the frequency of cars by cylinder count
+ggplot(mtcars, aes(x = cyl)) +
+  geom_bar(fill = "steelblue", alpha = 0.8) +
+  labs(
+    title = "Distribution of Cars by Cylinder Count",
+    x = "Number of Cylinders",
+    y = "Number of Cars"
+  ) +
+  theme_minimal()
+```
+
+## Exercise 3: Mean Comparison Plot
+
+### 3a. Calculate average quarter-mile time by cylinder count
+
+```{r}
+# Calculate mean quarter-mile time (qsec) by cylinder count
+average_qsec <- mtcars %>%
+  group_by(cyl) %>%
+  summarize(
+    mean_qsec = mean(qsec, na.rm = TRUE),
+    se_qsec = sd(qsec, na.rm = TRUE) / sqrt(n()),
+    .groups = 'drop'
+  )
+
+print(average_qsec)
+```
+
+### 3b. Create column plot with error bars
+
+```{r}
+# Plot average quarter-mile time by cylinder count
+ggplot(average_qsec, aes(x = cyl, y = mean_qsec)) +
+  geom_col(fill = "darkgreen", alpha = 0.7) +
+  geom_errorbar(aes(ymin = mean_qsec - se_qsec, ymax = mean_qsec + se_qsec),
+                width = 0.2) +
+  labs(
+    title = "Average Quarter-Mile Time by Cylinder Count",
+    x = "Number of Cylinders", 
+    y = "Quarter-Mile Time (seconds)",
+    caption = "Error bars represent standard error"
+  ) +
+  theme_classic()
+```
+
+### 3c. Interpretation
+
+**Write your interpretation here:**
+
+*[Your interpretation of the cylinder-performance relationship]*
+
+## Exercise 4: Advanced Challenge
+
+Create a comprehensive visualization that shows the relationship between horsepower (`hp`) and quarter-mile time (`qsec`), colored by transmission type (`am` where 0 = automatic, 1 = manual):
+
+```{r}
+# First, create a better transmission variable
+mtcars <- mtcars %>%
+  mutate(transmission = ifelse(am == 0, "Automatic", "Manual"))
+
+# Your code here: Create an advanced plot with:
+# - Scatter plot of hp vs qsec
+# - Color by transmission type  
+# - Separate trend lines for each transmission type
+# - Professional styling and labels
+# - Proper title and caption
+
+
+```
+
+## Exercise 5: Faceted Analysis
+
+Create a faceted plot showing the relationship between weight and fuel efficiency, separated by cylinder count:
+
+```{r}
+# Your code here: Create faceted scatter plots
+
+
+```
+
+------------------------------------------------------------------------
+
+# Saving and Exporting Plots
+
+For academic publications, you'll need to save high-quality versions of your plots:
+
+```{r eval=FALSE}
+# Save plot as high-resolution PNG
+ggsave("trust_by_age.png", width = 8, height = 6, dpi = 300)
+
+# Save as PDF for publications  
+ggsave("trust_by_age.pdf", width = 8, height = 6)
+
+# Save as SVG for web use
+ggsave("trust_by_age.svg", width = 8, height = 6)
+```
+
+------------------------------------------------------------------------
+
+# Key Principles for Research Visualizations
+
+## 1. **Clarity First**
+
+-   Clear visualizations help audiences understand patterns in data
+-   Always prioritize understanding over aesthetics
+-   Use descriptive titles and axis labels
+
+## 2. **Appropriate Chart Types**
+
+-   **Scatter plots**: Relationships between continuous variables
+-   **Bar/Column plots**: Comparing categories or group means
+-   **Box plots**: Comparing distributions across groups
+-   **Histograms**: Understanding single variable distributions
+
+## 3. **Honest Representation**
+
+-   Don't manipulate scales to exaggerate effects
+-   Include confidence intervals and error bars when appropriate
+-   Clearly indicate sample sizes and data sources
+-   Make sure your axes start at 0 (or another reasonable point), and are the same across graphs
+
+## 4. **Accessibility**
+
+-   Use colorblind-friendly palettes
+-   Provide alternative text descriptions
+-   Ensure sufficient contrast
+
+## 5. **Publication Standards**
+
+-   Follow your target journal's figure guidelines
+-   Include proper statistical information in captions
+-   Use consistent styling across all figures
+
+## 6. **An Example** 
+
+-   <https://academic.oup.com/jcmc/article/29/1/zmad039/7394122>
+
+------------------------------------------------------------------------
+
+# What You've Accomplished Today
+
+Excellent work! You've now mastered:
+
+✅ **ggplot2 fundamentals** - grammar of graphics approach
+
+✅ **Essential plot types** for research
+
+✅ **Professional styling** for academic publications
+
+✅ **Best practices** for honest, accessible visualization
+
+## Your Visualization Toolkit:
+
+-   Scatter plots for relationships
+-   Bar plots for comparisons
+-   Histograms for distributions
+-   Box plots for group comparisons
+-   Faceted plots for complex analyses
+-   Professional themes and styling
+
+## Resources for Continued Learning:
+
+-   [ggplot2 Reference](https://ggplot2.tidyverse.org/reference/)
+-   [R Graphics Cookbook](https://r-graphics.org/)
+-   [Data Visualization Best Practices](https://www.tableau.com/learn/articles/data-visualization)
+-   [Colorbrewer Palettes](https://colorbrewer2.org/)
+-   [Academic Figure Guidelines](https://www.nature.com/nature/for-authors/formatting-guide)
+
+Great job building your data visualization skills! 📊✨

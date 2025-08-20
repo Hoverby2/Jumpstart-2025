@@ -13,7 +13,7 @@ library(tidyverse)
 
 # Welcome to R for Communication Research!
 
-Welcome to the first day of Jumpstart! Today we'll introduce you to R and RStudio - tools that will help you analyze communication data throughout your graduate studies.
+Welcome to the second day of Jumpstart! Today we'll introduce you to R and RStudio - tools that will help you analyze communication data throughout your graduate studies.
 
 ## Today's Learning Goals:
 

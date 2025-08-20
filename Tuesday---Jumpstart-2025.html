@@ -359,8 +359,8 @@ display: none;
 
 <div id="welcome-to-r-for-communication-research" class="section level1">
 <h1>Welcome to R for Communication Research!</h1>
-<p>Welcome to the first day of Jumpstart! Today we’ll introduce you to R
-and RStudio - tools that will help you analyze communication data
+<p>Welcome to the second day of Jumpstart! Today we’ll introduce you to
+R and RStudio - tools that will help you analyze communication data
 throughout your graduate studies.</p>
 <div id="todays-learning-goals" class="section level2">
 <h2>Today’s Learning Goals:</h2>
@@ -796,7 +796,7 @@ structure:</p>
 files in that drawer.</p>
 <p>You can check your current working directory by typing:</p>
 <pre class="r"><code>getwd()  # &quot;get working directory&quot;</code></pre>
-<pre><code>## [1] &quot;/Users/HannahOverbye/My Drive/Teaching/COMM_JUMPSTART/2025&quot;</code></pre>
+<pre><code>## [1] &quot;/Users/HannahOverbye/My Drive/Teaching/COMM_JUMPSTART/Jumpstart 2025&quot;</code></pre>
 <p>This will show you the full path to where R is currently looking for
 files. If you need to change your working directory, you can use:</p>
 <pre class="r"><code># setwd(&quot;path/to/your/project&quot;)  # &quot;set working directory&quot;
@@ -846,23 +846,23 @@ media_data &lt;- read_csv(here(&quot;data&quot;, &quot;media_trust_survey.csv&qu
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (5): participant_id, gender, education, news_source, income_bracket
-## dbl (5): age, trust_score, credibility_rating, daily_news_minutes, political...
+## dbl (5): age, daily_news_minutes, political_interest, trust_score, credibili...
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre class="r"><code># Quick peek at our data
 head(media_data)</code></pre>
 <pre><code>## # A tibble: 6 × 10
-##   participant_id   age gender            education   news_source     trust_score
-##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt;                 &lt;dbl&gt;
-## 1 P001              30 Female            Bachelor&#39;s  Facebook                4.7
-## 2 P002              29 Female            Bachelor&#39;s  Online News Si…         7  
-## 3 P003              53 Male              Bachelor&#39;s  Online News Si…         3.2
-## 4 P004              43 Prefer not to say High School Instagram               2.7
-## 5 P005              18 Female            Bachelor&#39;s  YouTube                 4.2
-## 6 P006              40 Male              Bachelor&#39;s  YouTube                 5.3
-## # ℹ 4 more variables: credibility_rating &lt;dbl&gt;, daily_news_minutes &lt;dbl&gt;,
-## #   political_interest &lt;dbl&gt;, income_bracket &lt;chr&gt;</code></pre>
+##   participant_id   age gender           education news_source daily_news_minutes
+##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;     &lt;chr&gt;                    &lt;dbl&gt;
+## 1 P001              30 Female           Bachelor… Facebook                   112
+## 2 P002              29 Female           Bachelor… Online New…                 75
+## 3 P003              53 Male             Bachelor… Online New…                169
+## 4 P004              43 Prefer not to s… High Sch… Instagram                  114
+## 5 P005              18 Female           Bachelor… YouTube                     55
+## 6 P006              40 Male             Bachelor… YouTube                     29
+## # ℹ 4 more variables: political_interest &lt;dbl&gt;, income_bracket &lt;chr&gt;,
+## #   trust_score &lt;dbl&gt;, credibility_rating &lt;dbl&gt;</code></pre>
 </div>
 <div id="exploring-your-data" class="section level2">
 <h2>Exploring Your Data</h2>
@@ -876,11 +876,11 @@ glimpse(media_data)        # Overview of all variables</code></pre>
 ## $ gender             &lt;chr&gt; &quot;Female&quot;, &quot;Female&quot;, &quot;Male&quot;, &quot;Prefer not to say&quot;, &quot;F…
 ## $ education          &lt;chr&gt; &quot;Bachelor&#39;s&quot;, &quot;Bachelor&#39;s&quot;, &quot;Bachelor&#39;s&quot;, &quot;High Sch…
 ## $ news_source        &lt;chr&gt; &quot;Facebook&quot;, &quot;Online News Sites&quot;, &quot;Online News Sites…
-## $ trust_score        &lt;dbl&gt; 4.7, 7.0, 3.2, 2.7, 4.2, 5.3, 2.4, 5.3, 2.9, 4.3, 5…
-## $ credibility_rating &lt;dbl&gt; 3.4, 1.0, 5.0, 3.5, 4.8, 7.0, 5.1, 4.9, 5.6, 4.3, 4…
-## $ daily_news_minutes &lt;dbl&gt; 38, 139, 93, 40, 7, 144, 82, 92, 148, 122, 137, 86,…
-## $ political_interest &lt;dbl&gt; 5, 6, 4, 5, 5, 7, 5, 7, 4, 4, 6, 2, 6, 6, 7, 5, 6, …
-## $ income_bracket     &lt;chr&gt; &quot;$75k-$100k&quot;, &quot;$75k-$100k&quot;, &quot;Under $25k&quot;, &quot;$25k-$50…</code></pre>
+## $ daily_news_minutes &lt;dbl&gt; 112, 75, 169, 114, 55, 29, 42, 177, 91, 170, 133, 1…
+## $ political_interest &lt;dbl&gt; 5, 3, 3, 4, 3, 5, 2, 2, 4, 4, 5, 5, 4, 3, 4, 1, 5, …
+## $ income_bracket     &lt;chr&gt; &quot;$75k-$100k&quot;, &quot;Under $25k&quot;, &quot;$75k-$100k&quot;, &quot;Under $2…
+## $ trust_score        &lt;dbl&gt; 1.5, 1.0, 4.7, 3.3, 2.5, 5.0, 4.7, 4.3, 4.7, 7.0, 3…
+## $ credibility_rating &lt;dbl&gt; 3.1, 1.0, 6.4, 5.0, 4.1, 7.0, 5.7, 6.4, 4.8, 7.0, 3…</code></pre>
 <pre class="r"><code>summary(media_data)        # Basic statistics</code></pre>
 <pre><code>##  participant_id          age           gender           education        
 ##  Length:250         Min.   :18.00   Length:250         Length:250        
@@ -889,45 +889,45 @@ glimpse(media_data)        # Overview of all variables</code></pre>
 ##                     Mean   :47.38                                        
 ##                     3rd Qu.:62.75                                        
 ##                     Max.   :75.00                                        
-##  news_source         trust_score    credibility_rating daily_news_minutes
-##  Length:250         Min.   :1.000   Min.   :1.000      Min.   :  5.00    
-##  Class :character   1st Qu.:3.125   1st Qu.:4.100      1st Qu.: 49.00    
-##  Mode  :character   Median :4.300   Median :5.000      Median : 93.00    
-##                     Mean   :4.226   Mean   :4.982      Mean   : 92.35    
-##                     3rd Qu.:5.375   3rd Qu.:5.975      3rd Qu.:135.00    
-##                     Max.   :7.000   Max.   :7.000      Max.   :180.00    
-##  political_interest income_bracket    
-##  Min.   :1.000      Length:250        
-##  1st Qu.:4.000      Class :character  
-##  Median :5.000      Mode  :character  
-##  Mean   :4.568                        
-##  3rd Qu.:6.000                        
-##  Max.   :7.000</code></pre>
+##  news_source        daily_news_minutes political_interest income_bracket    
+##  Length:250         Min.   :  6.00     Min.   :1.000      Length:250        
+##  Class :character   1st Qu.: 53.25     1st Qu.:3.250      Class :character  
+##  Mode  :character   Median : 95.50     Median :4.000      Mode  :character  
+##                     Mean   : 94.80     Mean   :4.344                        
+##                     3rd Qu.:137.00     3rd Qu.:5.000                        
+##                     Max.   :180.00     Max.   :7.000                        
+##   trust_score    credibility_rating
+##  Min.   :1.000   Min.   :1.000     
+##  1st Qu.:2.725   1st Qu.:3.100     
+##  Median :3.700   Median :4.200     
+##  Mean   :3.702   Mean   :4.264     
+##  3rd Qu.:4.700   3rd Qu.:5.400     
+##  Max.   :7.000   Max.   :7.000</code></pre>
 <pre class="r"><code>names(media_data)          # Variable names</code></pre>
 <pre><code>##  [1] &quot;participant_id&quot;     &quot;age&quot;                &quot;gender&quot;            
-##  [4] &quot;education&quot;          &quot;news_source&quot;        &quot;trust_score&quot;       
-##  [7] &quot;credibility_rating&quot; &quot;daily_news_minutes&quot; &quot;political_interest&quot;
-## [10] &quot;income_bracket&quot;</code></pre>
+##  [4] &quot;education&quot;          &quot;news_source&quot;        &quot;daily_news_minutes&quot;
+##  [7] &quot;political_interest&quot; &quot;income_bracket&quot;     &quot;trust_score&quot;       
+## [10] &quot;credibility_rating&quot;</code></pre>
 <pre class="r"><code>nrow(media_data)          # Number of participants</code></pre>
 <pre><code>## [1] 250</code></pre>
 <pre class="r"><code>ncol(media_data)          # Number of variables</code></pre>
 <pre><code>## [1] 10</code></pre>
 <pre class="r"><code># Look at specific variables
 media_data$trust_score     # Use $ to access individual columns</code></pre>
-<pre><code>##   [1] 4.7 7.0 3.2 2.7 4.2 5.3 2.4 5.3 2.9 4.3 5.4 1.1 3.7 1.0 5.7 4.5 5.1 1.0
-##  [19] 4.9 5.7 4.3 7.0 5.4 7.0 5.4 4.3 4.0 5.0 4.8 4.5 2.3 4.9 4.2 3.6 3.7 3.2
-##  [37] 3.5 5.4 7.0 4.7 5.1 7.0 3.7 5.3 5.2 1.8 6.0 6.2 3.3 2.4 3.9 4.3 7.0 3.9
-##  [55] 2.1 7.0 3.5 1.0 4.9 3.6 1.8 1.0 2.6 7.0 4.4 2.1 2.3 4.6 4.5 3.8 3.8 5.7
-##  [73] 3.8 2.1 1.9 3.4 2.3 3.6 7.0 6.7 4.5 4.3 2.6 6.1 5.7 7.0 7.0 1.9 2.7 1.5
-##  [91] 6.1 7.0 5.5 4.3 7.0 4.7 2.3 4.2 3.7 4.5 5.9 4.5 7.0 2.2 5.3 7.0 2.6 3.6
-## [109] 3.7 5.2 5.8 7.0 3.2 5.9 2.7 4.6 5.2 3.7 3.6 2.9 4.7 6.2 5.3 5.9 5.6 2.5
-## [127] 5.1 5.0 6.2 3.0 1.0 3.6 4.2 2.6 4.6 4.9 6.2 2.3 3.7 3.9 1.0 5.2 2.7 5.7
-## [145] 3.6 4.7 2.7 6.4 4.7 4.6 1.0 5.3 1.3 3.9 7.0 3.8 5.6 5.7 1.2 3.8 2.9 5.5
-## [163] 3.7 7.0 5.2 3.9 3.4 2.6 1.0 2.2 4.5 5.8 5.1 3.8 6.4 1.0 1.4 4.4 5.8 4.9
-## [181] 1.7 5.2 3.1 4.2 1.0 3.9 3.5 4.0 3.5 2.8 6.3 5.4 4.7 1.0 2.7 4.3 6.0 6.4
-## [199] 2.9 2.8 6.3 1.0 6.5 2.5 1.0 1.8 5.3 4.5 3.3 4.5 2.9 3.6 3.9 3.6 7.0 6.1
-## [217] 4.8 5.4 3.6 4.2 4.3 3.2 3.8 5.2 4.8 1.8 6.6 3.3 4.5 6.0 5.3 2.7 2.4 4.8
-## [235] 3.5 6.1 7.0 3.3 4.2 5.0 3.4 6.3 4.0 7.0 3.1 2.5 4.8 5.1 4.2 4.2</code></pre>
+<pre><code>##   [1] 1.5 1.0 4.7 3.3 2.5 5.0 4.7 4.3 4.7 7.0 3.7 3.1 2.0 5.1 4.6 2.2 3.7 2.3
+##  [19] 3.4 4.4 5.0 5.3 2.2 6.2 2.6 3.1 4.9 6.6 5.4 3.1 2.7 1.5 2.9 4.2 7.0 1.3
+##  [37] 6.6 4.8 1.0 3.0 3.9 3.9 5.3 4.8 5.0 5.2 4.3 4.1 3.1 5.4 1.5 5.1 3.8 3.6
+##  [55] 5.5 4.1 4.1 3.0 2.8 5.0 2.7 3.7 3.6 4.1 4.2 1.8 3.9 3.4 4.4 1.2 2.8 3.7
+##  [73] 2.4 4.6 2.3 4.2 4.8 4.7 3.4 4.2 3.7 3.8 4.7 4.8 3.3 3.7 5.0 4.1 3.9 2.3
+##  [91] 3.3 2.5 3.5 2.4 1.0 6.0 1.0 6.7 3.3 1.0 3.5 3.2 4.7 5.1 4.2 3.6 3.2 3.0
+## [109] 1.0 4.2 3.4 3.3 2.3 4.0 5.5 2.3 4.7 1.0 3.8 4.4 5.6 3.2 2.3 4.3 1.4 5.4
+## [127] 5.1 1.0 3.7 4.7 5.6 3.4 1.4 3.6 3.3 4.3 3.0 2.7 6.7 5.4 2.9 3.9 4.2 5.3
+## [145] 5.6 2.0 6.2 2.2 3.2 5.1 4.2 3.7 2.8 3.6 4.0 2.2 3.6 1.0 2.1 3.6 4.1 4.6
+## [163] 6.1 5.8 5.4 4.2 5.2 4.6 2.9 2.6 2.2 4.1 7.0 6.3 2.1 3.2 3.6 4.5 3.5 5.8
+## [181] 5.8 3.5 5.5 4.4 3.8 4.9 2.7 4.2 1.0 5.1 3.7 4.5 1.9 1.0 4.0 5.9 4.7 1.0
+## [199] 4.8 4.0 3.9 4.3 2.9 5.5 3.2 4.0 5.1 1.0 4.3 2.6 3.6 3.2 3.6 6.4 1.5 4.4
+## [217] 5.1 4.3 3.0 1.4 1.5 3.3 5.1 2.9 4.7 3.3 4.1 1.5 1.0 2.4 5.8 2.6 2.8 3.6
+## [235] 3.1 3.4 2.0 4.1 4.1 2.9 2.0 2.1 6.6 2.5 2.7 3.8 3.1 2.3 2.4 2.3</code></pre>
 <hr />
 </div>
 </div>
@@ -1053,7 +1053,7 @@ target_group &lt;- media_data %&gt;%
   filter(age &gt;= 18 &amp; age &lt;= 35 &amp; trust_score &gt; 5)
 
 nrow(target_group)  # How many participants meet our criteria?</code></pre>
-<pre><code>## [1] 19</code></pre>
+<pre><code>## [1] 3</code></pre>
 </div>
 <div id="mutate-create-new-variables" class="section level2">
 <h2>mutate(): Create New Variables</h2>
@@ -1080,12 +1080,12 @@ categorized_data %&gt;%
 <pre><code>## # A tibble: 6 × 5
 ##     age age_group   trust_score trust_percent trust_category
 ##   &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt; &lt;chr&gt;         
-## 1    30 Adult               4.7          67.1 High Trust    
-## 2    29 Adult               7           100   High Trust    
-## 3    53 Older Adult         3.2          45.7 Low Trust     
-## 4    43 Adult               2.7          38.6 Low Trust     
-## 5    18 Young Adult         4.2          60   High Trust    
-## 6    40 Adult               5.3          75.7 High Trust</code></pre>
+## 1    30 Adult               1.5          21.4 Low Trust     
+## 2    29 Adult               1            14.3 Low Trust     
+## 3    53 Older Adult         4.7          67.1 High Trust    
+## 4    43 Adult               3.3          47.1 Low Trust     
+## 5    18 Young Adult         2.5          35.7 Low Trust     
+## 6    40 Adult               5            71.4 High Trust</code></pre>
 </div>
 <div id="summarize-and-group_by-calculate-statistics" class="section level2">
 <h2>summarize() and group_by(): Calculate Statistics</h2>
@@ -1112,14 +1112,14 @@ print(trust_by_source)</code></pre>
 <pre><code>## # A tibble: 8 × 4
 ##   news_source       mean_trust median_trust participant_count
 ##   &lt;chr&gt;                  &lt;dbl&gt;        &lt;dbl&gt;             &lt;int&gt;
-## 1 Facebook                3.69         3.65                28
-## 2 Instagram               4.04         4.15                38
-## 3 Newspapers              4.60         4.5                 25
-## 4 Online News Sites       4.46         4.5                 32
-## 5 Podcasts                4.67         5.05                30
-## 6 Television              4.53         4.55                34
-## 7 Twitter                 4.30         5.2                 25
-## 8 YouTube                 3.69         3.85                38</code></pre>
+## 1 Facebook                3.52         3.75                28
+## 2 Instagram               3.64         3.95                38
+## 3 Newspapers              3.38         3.3                 25
+## 4 Online News Sites       3.71         3.85                32
+## 5 Podcasts                4.08         3.95                30
+## 6 Television              3.61         3.5                 34
+## 7 Twitter                 3.83         4.1                 25
+## 8 YouTube                 3.80         3.65                38</code></pre>
 </div>
 <div id="arrange-sort-your-data" class="section level2">
 <h2>arrange(): Sort Your Data</h2>
@@ -1138,16 +1138,16 @@ multi_sort &lt;- media_data %&gt;%
 
 head(sorted_desc)</code></pre>
 <pre><code>## # A tibble: 6 × 10
-##   participant_id   age gender     education    news_source       trust_score
-##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;                   &lt;dbl&gt;
-## 1 P002              29 Female     Bachelor&#39;s   Online News Sites           7
-## 2 P022              50 Non-binary Master&#39;s     Podcasts                    7
-## 3 P024              71 Female     High School  Television                  7
-## 4 P039              20 Female     Bachelor&#39;s   Online News Sites           7
-## 5 P042              67 Male       High School  Podcasts                    7
-## 6 P053              28 Female     Some College Online News Sites           7
-## # ℹ 4 more variables: credibility_rating &lt;dbl&gt;, daily_news_minutes &lt;dbl&gt;,
-## #   political_interest &lt;dbl&gt;, income_bracket &lt;chr&gt;</code></pre>
+##   participant_id   age gender education  news_source       daily_news_minutes
+##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;                          &lt;dbl&gt;
+## 1 P010              29 Male   Bachelor&#39;s Podcasts                         170
+## 2 P035              75 Male   Bachelor&#39;s Newspapers                         7
+## 3 P173              75 Female Bachelor&#39;s Online News Sites                180
+## 4 P098              51 Male   Master&#39;s   Online News Sites                 55
+## 5 P139              59 Male   Bachelor&#39;s Television                        75
+## 6 P028              61 Male   Master&#39;s   Newspapers                       106
+## # ℹ 4 more variables: political_interest &lt;dbl&gt;, income_bracket &lt;chr&gt;,
+## #   trust_score &lt;dbl&gt;, credibility_rating &lt;dbl&gt;</code></pre>
 <hr />
 </div>
 </div>
