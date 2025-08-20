@@ -795,6 +795,5 @@ your_project/
 -   [R for Data Science](https://r4ds.hadley.nz/) - Comprehensive guide
 -   [Tidyverse documentation](https://www.tidyverse.org/) - Package references
 -   [RStudio Cheatsheets](https://www.rstudio.com/resources/cheatsheets/) - Quick references
--   [Communication Research with R](https://bookdown.org/connect/comm_research_r/) - Field-specific examples
 
 **Remember:** The best way to learn R is by practicing with your own research questions and data!
