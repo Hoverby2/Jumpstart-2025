@@ -1,0 +1,102 @@
+---
+title: "Tuesday - Jumpstart 2025"
+author: "Dan Lane"
+date: "2025-08-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(tidyverse)
+library(mediation)
+library(summarytools)
+library(modelsummary)
+
+#load process macro from external script
+source(here("PROCESS Macro","processv50","PROCESS v5.0 for R","process.R"))
+
+#load election data
+load(here("data","2020-ElectionData.rds"))
+```
+
+# Welcome to R for Communication Research!
+
+Welcome to the second day of Jumpstart! In Group B we will be exploring mediation and moderation in R
+
+## Today's Learning Goals:
+
+-   Run basic moderation models
+-   Visualize and probe moderation models (2 x 3-way interactions)
+-   Simple slopes Analysis
+-   Run mediation models (mediation and process packages)
+
+
+
+## Get to know your dataset... data about digital media use from the 2020 U.S. Election
+
+```{r, results='asis'}
+
+#Dataframe summary using summarytools()
+dfSummary(D1,style="multiline")
+
+
+```
+
+## The Basic Moderation Equation
+
+```{r}
+
+
+
+model1<-lm(SMExpPol_w1~Age_w1+Edu_w1+PolInt_w1,data=D1)
+
+modelsummary(model1,stars=T)
+
+```
+
+
+
+------------------------------------------------------------------------
+
+# Next Steps and Best Practices
+
+Congratulations! You've now learned the fundamentals of R and data manipulation. Here are some best practices for your research:
+
+## Project Organization Tips:
+
+```         
+your_project/
+├── data/           
+  ├── raw/          # Raw data files
+  ├── processed/    # Clean data files
+├── scripts/        # R scripts  
+├── output/         # Results, plots, tables
+└── README.md       # Project description
+```
+
+## Code Style Guidelines:
+
+-   Use meaningful variable names (`trust_score` not `x1`)
+-   Comment your code extensively using # 
+-   Use consistent spacing and indentation
+-   Break complex operations into smaller steps
+
+## What You've Accomplished Today:
+
+✅ **Session 1:** R basics, data types, functions\
+✅ **Session 2:** Data import, tidyverse, data manipulation\
+✅ **Bonus:** File organization and project management
+
+## Coming Up:
+
+-   Statistical analysis techniques\
+-   Data visualization with ggplot2
+
+## Resources for Continued Learning:
+
+-   [R for Data Science](https://r4ds.hadley.nz/) - Comprehensive guide
+-   [Tidyverse documentation](https://www.tidyverse.org/) - Package references
+-   [RStudio Cheatsheets](https://www.rstudio.com/resources/cheatsheets/) - Quick references
+
+**Remember:** The best way to learn R is by practicing with your own research questions and data!
