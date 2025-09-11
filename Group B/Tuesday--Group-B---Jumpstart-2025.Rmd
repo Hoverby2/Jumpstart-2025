@@ -94,7 +94,7 @@ interactions::johnson_neyman(fit2, Anger_w1,Hope_w1)
 sim_slopes(fit2, Anger_w1,Hope_w1)
 sim_slopes(fit3, Age_w1,Edu_w1)
 ```
-## The Basic Moderation Equation (2 x interaction)
+## Conducting Three-way Interactions
 
 ```{r}
 

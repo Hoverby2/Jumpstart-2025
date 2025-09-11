@@ -11,14 +11,10 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 library(here)
 library(tidyverse)
-library(mediation)
+library(Superpower)
 library(summarytools)
-library(modelsummary)
-library(interactions)
-library(emmeans)
-library(ggeffects)
-library(ggplot2)
-library(mediation)
+library(ellmer)
+
 
 #load election data
 load(here("data","2020-ElectionData.rds"))
@@ -30,11 +26,7 @@ Today In Group B we will be exploring mediation and moderation in R
 
 ## Today's Learning Goals:
 
--   Run basic moderation models
--   Visualize and probe moderation models (2 x 3-way interactions)
--   Simple slopes Analysis
--   Run mediation models (mediation and process packages)
-
+-   Power Analysis in R
 
 
 ## Power Analysis In R
@@ -58,3 +50,450 @@ result_exact <- ANOVA_exact(design_result,emm = TRUE,emm_comp = "Condition")
 
 
 ```
+
+# Introduction to elmer
+
+The `elmer` package provides a unified interface for interacting with various Large Language Models (LLMs) directly from R. It supports multiple providers including OpenAI, Claude (Anthropic), Google's Gemini, and others, making it easy to integrate AI capabilities into your R workflows.
+
+## Key Features
+
+- **Multiple LLM providers** - OpenAI, Anthropic, Google, Ollama, and more
+- **Unified interface** - Same syntax across different models
+- **Streaming support** - Real-time responses for long completions
+- **Tool calling** - Allow models to call R functions
+- **Conversation management** - Maintain chat history
+- **Cost tracking** - Monitor API usage and costs
+
+# Installation
+
+Install the elmer package from CRAN or GitHub:
+
+```{r installation}
+# From CRAN (when available)
+#install.packages("ellmer")
+
+```
+
+# Setup and Configuration
+
+## API Keys
+
+You'll need API keys for the services you want to use:
+
+```{r api-setup}
+# Set up API keys (do this once, store in .Renviron)
+# For OpenAI
+Sys.setenv(OPENAI_API_KEY = "your-openai-api-key-here")
+
+# For Anthropic (Claude)
+Sys.setenv(ANTHROPIC_API_KEY = "your-anthropic-api-key-here")
+
+# For Google (Gemini)
+Sys.setenv(GOOGLE_AI_API_KEY = "AIzaSyCmtt6l9oBFLpv7NpXEyjJSaFZmhGTzesc")
+
+# Better practice: Add these to your .Renviron file
+# usethis::edit_r_environ()
+```
+
+## Basic Configuration
+
+```{r basic-config}
+
+# Check available providers
+providers <- elmer_providers()
+print(providers)
+
+# Your chat object is created, now send a message
+chat <- chat_google_gemini(
+  system_prompt = "tell me a story",
+  api_key = "AIzaSyCmtt6l9oBFLpv7NpXEyjJSaFZmhGTzesc"
+)
+
+# Send a message to get the story
+response <- chat$chat("Please tell me a short story about a robot who learns to paint.")
+cat(response)
+
+chat_claude <- chat_gemini()(provider = "anthropic", model = "claude-3-sonnet-20240229")
+chat_gpt4 <- elmer_chat(provider = "openai", model = "gpt-4")
+```
+
+# Basic Usage
+
+## Simple Text Generation
+
+```{r simple-generation}
+# Create a chat instance
+chat <- elmer_chat(provider = "openai")
+
+# Send a simple prompt
+response <- chat$chat("Explain linear regression in simple terms.")
+cat(response)
+```
+
+## Interactive Chat
+
+```{r interactive-chat}
+# Start a conversation
+chat <- elmer_chat()
+
+# Multiple exchanges
+chat$chat("Hello! I'm working on a data analysis project.")
+chat$chat("I have a dataset with sales data. What visualizations would you recommend?")
+chat$chat("How would I create these in R using ggplot2?")
+
+# View conversation history
+chat$history()
+```
+
+# Advanced Features
+
+## System Messages
+
+Set up the AI's behavior with system messages:
+
+```{r system-messages}
+# Create chat with system prompt
+data_analyst_chat <- elmer_chat(
+  system = "You are an expert R data analyst. Always provide working R code examples and explain statistical concepts clearly."
+)
+
+response <- data_analyst_chat$chat(
+  "How do I perform a t-test in R and interpret the results?"
+)
+cat(response)
+```
+
+## Streaming Responses
+
+For long responses, use streaming:
+
+```{r streaming}
+chat <- elmer_chat()
+
+# Stream response in real-time
+chat$stream("Write a comprehensive guide to data visualization best practices, including specific R examples.")
+```
+
+## Multiple Models Comparison
+
+Compare responses from different models:
+
+```{r model-comparison}
+# Create chats with different models
+gpt4 <- elmer_chat(provider = "openai", model = "gpt-4")
+claude <- elmer_chat(provider = "anthropic", model = "claude-3-sonnet-20240229")
+gemini <- elmer_chat(provider = "google", model = "gemini-pro")
+
+prompt <- "Explain the difference between correlation and causation with an example."
+
+# Get responses from each
+gpt4_response <- gpt4$chat(prompt)
+claude_response <- claude$chat(prompt)
+gemini_response <- gemini$chat(prompt)
+
+# Compare responses
+cat("GPT-4 Response:\n", gpt4_response, "\n\n")
+cat("Claude Response:\n", claude_response, "\n\n")
+cat("Gemini Response:\n", gemini_response, "\n\n")
+```
+
+# Working with Data
+
+## Data Analysis Assistant
+
+```{r data-analysis}
+library(datasets)
+library(dplyr)
+
+# Load a dataset
+data(mtcars)
+
+# Create a data-focused chat
+data_chat <- elmer_chat(
+  system = "You are a data scientist. Analyze datasets and provide R code for insights."
+)
+
+# Ask about the dataset structure
+response <- data_chat$chat(paste(
+  "I have the mtcars dataset. Here's its structure:",
+  capture.output(str(mtcars)),
+  "What are some interesting analyses I could perform?"
+))
+
+cat(response)
+```
+
+## Code Generation and Review
+
+```{r code-generation}
+code_chat <- elmer_chat(
+  system = "You are an expert R programmer. Write clean, efficient, well-documented R code."
+)
+
+# Request specific analysis code
+code_response <- code_chat$chat(
+  "Write R code to create a comprehensive exploratory data analysis of the mtcars dataset, including summary statistics, visualizations, and correlation analysis."
+)
+
+cat(code_response)
+```
+
+# Tool Calling (Function Calling)
+
+Allow the AI to call R functions directly:
+
+```{r tool-calling}
+# Define functions the AI can call
+calculate_summary <- function(data_name) {
+  data <- get(data_name)
+  list(
+    rows = nrow(data),
+    columns = ncol(data),
+    numeric_cols = sum(sapply(data, is.numeric)),
+    summary = summary(data)
+  )
+}
+
+create_plot <- function(x_var, y_var, dataset = "mtcars") {
+  data <- get(dataset)
+  library(ggplot2)
+  
+  p <- ggplot(data, aes_string(x = x_var, y = y_var)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    theme_minimal() +
+    labs(title = paste("Relationship between", x_var, "and", y_var))
+  
+  print(p)
+  return("Plot created successfully")
+}
+
+# Create chat with tool access
+tool_chat <- elmer_chat(
+  tools = list(
+    calculate_summary = calculate_summary,
+    create_plot = create_plot
+  )
+)
+
+# AI can now call these functions
+response <- tool_chat$chat(
+  "Please analyze the mtcars dataset and create a plot showing the relationship between mpg and hp."
+)
+```
+
+# Practical Applications
+
+## Automated Code Documentation
+
+```{r code-documentation}
+doc_chat <- elmer_chat(
+  system = "You are an R documentation expert. Write clear, comprehensive documentation for R code."
+)
+
+# Example function to document
+my_function <- '
+analyze_data <- function(df, target_col, predictor_cols) {
+  model <- lm(paste(target_col, "~", paste(predictor_cols, collapse = "+")), data = df)
+  summary(model)
+}
+'
+
+response <- doc_chat$chat(paste(
+  "Please write comprehensive documentation for this R function, including roxygen2 comments:",
+  my_function
+))
+
+cat(response)
+```
+
+## Statistical Consultation
+
+```{r statistical-consultation}
+stats_chat <- elmer_chat(
+  system = "You are a statistical consultant. Provide advice on appropriate statistical methods and their implementation in R."
+)
+
+consultation <- stats_chat$chat(
+  "I have a dataset with continuous outcome variable and several categorical and continuous predictors. I want to understand which factors are most important and build a predictive model. What statistical approaches would you recommend and how would I implement them in R?"
+)
+
+cat(consultation)
+```
+
+## Data Cleaning Assistant
+
+```{r data-cleaning}
+cleaning_chat <- elmer_chat(
+  system = "You are a data cleaning expert. Provide R code solutions for common data quality issues."
+)
+
+# Simulate a data problem
+messy_data_description <- "
+I have a dataset with the following issues:
+- Missing values in multiple columns
+- Inconsistent date formats (some MM/DD/YYYY, some DD-MM-YYYY)
+- Text columns with extra whitespace and mixed case
+- Outliers in numeric columns
+- Duplicate rows
+
+How should I approach cleaning this data in R?"
+
+cleaning_advice <- cleaning_chat$chat(messy_data_description)
+cat(cleaning_advice)
+```
+
+# Best Practices
+
+## Conversation Management
+
+```{r conversation-management}
+# Save conversation history
+chat <- elmer_chat()
+chat$chat("Hello, let's discuss data visualization.")
+
+# Export conversation
+history <- chat$history()
+saveRDS(history, "my_chat_history.rds")
+
+# Load and continue conversation later
+# loaded_history <- readRDS("my_chat_history.rds")
+# new_chat <- elmer_chat(history = loaded_history)
+```
+
+## Cost Management
+
+```{r cost-management}
+# Monitor usage (if supported by provider)
+chat <- elmer_chat()
+
+# Some providers offer usage tracking
+# usage_info <- chat$get_usage()
+# print(paste("Tokens used:", usage_info$total_tokens))
+# print(paste("Estimated cost: $", usage_info$cost))
+```
+
+## Error Handling
+
+```{r error-handling}
+safe_chat <- function(chat, prompt, max_retries = 3) {
+  for (i in 1:max_retries) {
+    tryCatch({
+      response <- chat$chat(prompt)
+      return(response)
+    }, error = function(e) {
+      if (i == max_retries) {
+        stop(paste("Failed after", max_retries, "attempts:", e$message))
+      } else {
+        cat("Attempt", i, "failed, retrying...\n")
+        Sys.sleep(2^i)  # Exponential backoff
+      }
+    })
+  }
+}
+
+# Usage
+chat <- elmer_chat()
+response <- safe_chat(chat, "Explain hypothesis testing in R.")
+```
+
+# Example Workflow: Complete Data Analysis
+
+```{r complete-workflow}
+# Set up specialized chat for data analysis
+analyst_chat <- elmer_chat(
+  system = "You are a senior data scientist. Provide thorough analysis with R code, interpretations, and recommendations."
+)
+
+# Step 1: Data exploration
+exploration_response <- analyst_chat$chat(
+  "I'm analyzing the built-in 'iris' dataset in R. Please provide a comprehensive exploratory data analysis including data structure, summary statistics, missing values check, and initial visualizations."
+)
+
+# Step 2: Statistical analysis
+statistical_response <- analyst_chat$chat(
+  "Based on the iris dataset exploration, what statistical tests would be appropriate to compare the species? Please provide R code for these tests and explain how to interpret the results."
+)
+
+# Step 3: Modeling
+modeling_response <- analyst_chat$chat(
+  "Now I want to build a predictive model to classify iris species based on the measurements. What machine learning approaches would you recommend? Please provide R code for at least two different approaches and compare their performance."
+)
+
+# Step 4: Visualization
+viz_response <- analyst_chat$chat(
+  "Create a comprehensive set of visualizations for this iris analysis that would be suitable for a final report. Include both exploratory plots and results visualization."
+)
+
+# Print responses
+cat("=== EXPLORATION ===\n", exploration_response, "\n\n")
+cat("=== STATISTICAL ANALYSIS ===\n", statistical_response, "\n\n") 
+cat("=== MODELING ===\n", modeling_response, "\n\n")
+cat("=== VISUALIZATION ===\n", viz_response, "\n\n")
+```
+
+# Troubleshooting
+
+## Common Issues
+
+```{r troubleshooting, eval=TRUE}
+# Check if API keys are set
+check_api_keys <- function() {
+  keys <- c("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GOOGLE_AI_API_KEY")
+  for (key in keys) {
+    value <- Sys.getenv(key)
+    if (value == "") {
+      cat(key, ": NOT SET\n")
+    } else {
+      cat(key, ": SET (", substr(value, 1, 10), "...)\n")
+    }
+  }
+}
+
+check_api_keys()
+```
+
+## Rate Limiting
+
+```{r rate-limiting}
+# Handle rate limits gracefully
+chat_with_backoff <- function(chat, prompt, initial_delay = 1) {
+  delay <- initial_delay
+  max_delay <- 60
+  
+  repeat {
+    tryCatch({
+      return(chat$chat(prompt))
+    }, error = function(e) {
+      if (grepl("rate limit", tolower(e$message))) {
+        cat("Rate limit hit, waiting", delay, "seconds...\n")
+        Sys.sleep(delay)
+        delay <- min(delay * 2, max_delay)
+      } else {
+        stop(e)
+      }
+    })
+  }
+}
+```
+
+# Conclusion
+
+The `elmer` package provides a powerful and flexible way to integrate Large Language Models into your R workflows. Whether you're looking for coding assistance, statistical consultation, or automated documentation, elmer makes it easy to leverage AI capabilities while staying within the R ecosystem.
+
+## Key Takeaways
+
+1. **Multiple providers**: Choose the best model for your specific task
+2. **Consistent interface**: Same syntax across different LLM providers  
+3. **Rich features**: Streaming, tool calling, conversation management
+4. **R-native**: Designed specifically for R users and workflows
+5. **Cost-effective**: Monitor usage and choose appropriate models
+
+## Next Steps
+
+- Experiment with different models for your specific use cases
+- Set up proper API key management using `.Renviron`
+- Explore tool calling to create powerful AI-assisted workflows
+- Consider creating specialized chat instances for different types of tasks
+
+Happy coding with AI assistance!
