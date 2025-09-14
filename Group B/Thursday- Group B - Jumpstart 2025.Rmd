@@ -28,7 +28,6 @@ Today In Group B we will be exploring mediation and moderation in R
 
 -   Power Analysis in R
 
-
 ## Power Analysis In R
 
 ```{r, results='asis'}
@@ -57,12 +56,12 @@ The `elmer` package provides a unified interface for interacting with various La
 
 ## Key Features
 
-- **Multiple LLM providers** - OpenAI, Anthropic, Google, Ollama, and more
-- **Unified interface** - Same syntax across different models
-- **Streaming support** - Real-time responses for long completions
-- **Tool calling** - Allow models to call R functions
-- **Conversation management** - Maintain chat history
-- **Cost tracking** - Monitor API usage and costs
+-   **Multiple LLM providers** - OpenAI, Anthropic, Google, Ollama, and more
+-   **Unified interface** - Same syntax across different models
+-   **Streaming support** - Real-time responses for long completions
+-   **Tool calling** - Allow models to call R functions
+-   **Conversation management** - Maintain chat history
+-   **Cost tracking** - Monitor API usage and costs
 
 # Installation
 
@@ -89,7 +88,7 @@ Sys.setenv(OPENAI_API_KEY = "your-openai-api-key-here")
 Sys.setenv(ANTHROPIC_API_KEY = "your-anthropic-api-key-here")
 
 # For Google (Gemini)
-Sys.setenv(GOOGLE_AI_API_KEY = "AIzaSyCmtt6l9oBFLpv7NpXEyjJSaFZmhGTzesc")
+Sys.setenv(GOOGLE_AI_API_KEY = "")
 
 # Better practice: Add these to your .Renviron file
 # usethis::edit_r_environ()
@@ -106,7 +105,7 @@ print(providers)
 # Your chat object is created, now send a message
 chat <- chat_google_gemini(
   system_prompt = "tell me a story",
-  api_key = "AIzaSyCmtt6l9oBFLpv7NpXEyjJSaFZmhGTzesc"
+  api_key = ""
 )
 
 # Send a message to get the story
@@ -483,17 +482,17 @@ The `elmer` package provides a powerful and flexible way to integrate Large Lang
 
 ## Key Takeaways
 
-1. **Multiple providers**: Choose the best model for your specific task
-2. **Consistent interface**: Same syntax across different LLM providers  
-3. **Rich features**: Streaming, tool calling, conversation management
-4. **R-native**: Designed specifically for R users and workflows
-5. **Cost-effective**: Monitor usage and choose appropriate models
+1.  **Multiple providers**: Choose the best model for your specific task
+2.  **Consistent interface**: Same syntax across different LLM providers\
+3.  **Rich features**: Streaming, tool calling, conversation management
+4.  **R-native**: Designed specifically for R users and workflows
+5.  **Cost-effective**: Monitor usage and choose appropriate models
 
 ## Next Steps
 
-- Experiment with different models for your specific use cases
-- Set up proper API key management using `.Renviron`
-- Explore tool calling to create powerful AI-assisted workflows
-- Consider creating specialized chat instances for different types of tasks
+-   Experiment with different models for your specific use cases
+-   Set up proper API key management using `.Renviron`
+-   Explore tool calling to create powerful AI-assisted workflows
+-   Consider creating specialized chat instances for different types of tasks
 
 Happy coding with AI assistance!

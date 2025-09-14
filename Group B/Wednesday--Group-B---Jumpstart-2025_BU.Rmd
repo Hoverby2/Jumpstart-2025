@@ -1,0 +1,801 @@
+---
+title: "Wednesday - Jumpstart 2025"
+author: "Dan Lane"
+date: "2025-08-19"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(tidyverse)
+library(mediation)
+library(summarytools)
+library(modelsummary)
+library(kableExtra)
+library(apaTables)
+
+#load election data
+load(here("data","2020-ElectionData.rds"))
+```
+
+# Welcome to R for Communication Research!
+
+Welcome to the third day of Jumpstart! In Group B we will be explore how to output r code and models
+
+## Today's Learning Goals:
+
+-   Basics of R Markdown
+-   Refersher on summarizing data and outputting descriptives
+-   Model Output using modelsummary() package
+-   Output using APA Tables package
+
+# What is R Markdown?
+
+R Markdown is a file format that combines **Markdown text** with **R code chunks** to create dynamic documents. This very document is written in R Markdown!
+
+# Basic Syntax
+
+## Text Formatting
+
+You can make text **bold** with `**bold**` or *italic* with `*italic*`.
+
+Create lists:
+- Item 1
+- Item 2
+  - Sub-item A
+  - Sub-item B
+
+Numbered lists:
+1. First item
+2. Second item
+3. Third item
+
+## Headers
+
+Use `#` for headers. More `#` symbols = smaller headers:
+
+```
+# Header 1
+## Header 2  
+### Header 3
+```
+
+# Code Chunks
+
+The real power of R Markdown is combining text with code. Here's how:
+
+## Basic Code Chunk
+
+This chunk shows R code and its output:
+
+```{r basic-example}
+# Simple calculation
+x <- c(1, 2, 3, 4, 5)
+mean(x)
+
+# Create a simple dataset
+data <- data.frame(
+  category = c("A", "B", "C"),
+  value = c(10, 15, 8)
+)
+print(data)
+```
+
+## Code Chunk Options
+
+You can control what shows up in your output:
+
+### Show Code Only (no output)
+```{r code-only, eval=FALSE}
+# This code shows but doesn't run
+summary(mtcars)
+plot(mtcars$mpg, mtcars$hp)
+```
+
+### Show Output Only (hide code)
+```{r output-only, echo=FALSE}
+# This code runs but doesn't show
+head(mtcars, 3)
+```
+
+### Run Code Silently (neither shows)
+```{r silent, include=FALSE}
+# This runs but shows neither code nor output
+secret_calculation <- 2 + 2
+```
+
+The secret calculation result was `r secret_calculation`.
+
+## Creating Tables
+
+### Simple Table with kable()
+```{r simple-table}
+kable(head(mtcars, 5), caption = "First 5 rows of mtcars dataset")
+```
+
+### Manual Table in Markdown
+
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Value A  | 10       | TRUE     |
+| Value B  | 20       | FALSE    |
+| Value C  | 30       | TRUE     |
+
+# Creating Plots
+
+R Markdown makes it easy to include plots:
+
+```{r basic-plot, fig.width=8, fig.height=5}
+# Basic scatter plot
+ggplot(mtcars, aes(x = mpg, y = hp)) +
+  geom_point(aes(color = factor(cyl))) +
+  labs(title = "Miles per Gallon vs Horsepower",
+       x = "Miles per Gallon",
+       y = "Horsepower",
+       color = "Cylinders") +
+  theme_minimal()
+```
+
+## Controlling Figure Size
+
+You can control plot dimensions with chunk options:
+- `fig.width=6, fig.height=4` - sets size in inches
+- `fig.align='center'` - centers the plot
+
+```{r small-plot, fig.width=5, fig.height=3, fig.align='center'}
+barplot(table(mtcars$cyl), 
+        main = "Distribution of Cylinders",
+        xlab = "Number of Cylinders",
+        ylab = "Count",
+        col = c("lightblue", "lightgreen", "lightcoral"))
+```
+
+# Inline Code
+
+You can include R results directly in text using backticks: The mtcars dataset has `r nrow(mtcars)` observations and `r ncol(mtcars)` variables. The average MPG is `r round(mean(mtcars$mpg), 2)`.
+
+# Useful Chunk Options
+
+Here's a reference table of common chunk options:
+
+```{r chunk-options-table, echo=FALSE}
+options_df <- data.frame(
+  Option = c("echo", "eval", "include", "message", "warning", "fig.width", "fig.height"),
+  Default = c("TRUE", "TRUE", "TRUE", "TRUE", "TRUE", "7", "7"),
+  Description = c(
+    "Show the code",
+    "Run the code",
+    "Include chunk in output",
+    "Show messages",
+    "Show warnings", 
+    "Figure width in inches",
+    "Figure height in inches"
+  )
+)
+
+kable(options_df, caption = "Common R Markdown Chunk Options")
+```
+
+# Mathematical Expressions
+
+R Markdown supports LaTeX math notation:
+
+Inline math: The formula for standard deviation is $\sigma = \sqrt{\frac{\sum(x_i - \mu)^2}{N}}$.
+
+Display math (centered):
+$$
+\bar{x} = \frac{\sum_{i=1}^{n} x_i}{n}
+$$
+
+# Output Formats
+
+You can change the output format in the YAML header:
+
+```yaml
+output:
+  html_document    # Web page
+  pdf_document     # PDF (requires LaTeX)
+  word_document    # Microsoft Word
+```
+
+# Global Options Example
+
+The setup chunk at the top sets global options:
+
+```{r show-setup, eval=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,        # Show code by default
+  message = FALSE,    # Hide messages
+  warning = FALSE,    # Hide warnings
+  fig.width = 8,      # Default figure width
+  fig.height = 6      # Default figure height
+)
+```
+
+# Quick Reference
+
+## Essential Chunk Options
+- `{r chunk-name}` - Basic chunk
+- `{r chunk-name, echo=FALSE}` - Hide code, show output
+- `{r chunk-name, eval=FALSE}` - Show code, don't run
+- `{r chunk-name, include=FALSE}` - Run code, show nothing
+
+## Knitting
+- **Ctrl+Shift+K** (Windows/Linux) or **Cmd+Shift+K** (Mac) to knit
+- Or click the "Knit" button in RStudio
+
+## Pro Tips
+1. Name your chunks for easier debugging
+2. Use `include=FALSE` for setup chunks
+3. Set global options in your setup chunk
+4. Use inline code for dynamic text
+5. Check your document frequently while writing
+
+---
+
+**Congratulations!** You now know the basics of R Markdown. This entire tutorial was written in R Markdown, demonstrating everything it teaches. Happy documenting!
+
+## Review of how to use summarytools package
+
+### 1. freq() - Frequency Tables for Categorical Variables
+
+The `freq()` function creates detailed frequency tables for categorical variables.
+
+```{r freq-basic,results="asis"}
+# Frequency table for gender
+freq(D1$Gender_w1, 
+     main = "Gender Distribution (Wave 1)",
+     style = 'rmarkdown')
+```
+
+
+### Customized Frequency Table
+
+```{r freq-custom,results="asis"}
+# More detailed frequency table with custom options
+freq(D1$ParAct_w1, 
+     main = "Political Participation - Wave 1",
+     style = 'rmarkdown',
+     report.nas = TRUE,      # Include missing values
+     totals = TRUE,          # Show totals
+     display.type = TRUE,    # Display variable type
+     headings = TRUE)        # Show column headings
+```
+
+### 2. descr() - Descriptive Statistics for Numerical Variables
+
+The `descr()` function provides comprehensive descriptive statistics for numerical variables.
+
+### Single Variable Description
+
+```{r descr-single,results="asis"}
+# Descriptive statistics for age
+descr(D1$Age_w1, 
+      main = "Age Distribution - Wave 1",
+      style = 'rmarkdown')
+```
+
+### Multiple Variables
+
+```{r descr-multiple,results="asis"}
+# Select news consumption variables for wave 1
+news_vars_w1 <- D1 %>% 
+  dplyr::select(News_TV_w1, News_Online_w1, News_Print_w1, News_Audio_w1)
+
+descr(news_vars_w1,
+      main = "News Consumption Statistics - Wave 1",
+      style = 'rmarkdown')
+```
+
+### Customized Descriptive Statistics
+
+```{r descr-custom,results="asis"}
+# Political attitudes with custom statistics
+political_vars <- D1 %>% 
+  dplyr::select(PolInt_w1, PolEff_w1, Hope_w1, Anger_w1)
+
+descr(political_vars,
+      main = "Political Attitudes - Descriptive Statistics",
+      stats = c("mean", "sd", "min", "max", "med", "IQR"),
+      style = 'rmarkdown',
+      transpose = TRUE,       # Transpose for better readability
+      headings = TRUE)
+```
+
+### Grouped Descriptive Statistics
+
+```{r descr-grouped,results="asis"}
+# Descriptive statistics by gender
+stby(D1$PolInt_w1, 
+   D1$Gender_w1, 
+   descr,
+   main = "Political Interest by Gender",
+   style = 'rmarkdown')
+```
+
+## 3. dfSummary() - Comprehensive Data Frame Summary
+
+The `dfSummary()` function provides a complete overview of your entire dataset.
+
+### Full Dataset Summary
+
+```{r dfsummary-full,results="asis"}
+# Complete summary of the dataset
+dfSummary(D1, 
+          main = "Complete Dataset Summary",
+          style = 'grid',
+          method = 'render',
+          graph.magnif = 0.75,    # Scale down graphs
+          valid.col = TRUE,       # Show valid percentages
+          na.col = TRUE,          # Show missing value info
+          varnumbers = FALSE,     # Don't show variable numbers
+          headings = TRUE)
+```
+
+### Subset Summary
+
+```{r dfsummary-subset,results="asis"}
+# Summary of wave 1 variables only
+wave1_vars <- D1 %>% 
+  dplyr::select(ends_with("_w1"))
+
+dfSummary(wave1_vars,
+          main = "Wave 1 Variables Summary",
+          style = 'grid',
+          method = 'render',
+          graph.magnif = 0.6,
+          tmp.img.dir = "/tmp",   # Specify temp directory for images
+          max.distinct.values = 10) # Limit distinct values shown
+```
+
+### Customized dfSummary
+
+```{r dfsummary-custom,results="asis"}
+# Focus on key demographic and political variables
+key_vars <- D1 %>% 
+  dplyr::select(Age_w1, Gender_w1, Edu_w1, PolInt_w1, PolEff_w1, ParAct_w1)
+
+dfSummary(key_vars,
+          main = "Key Variables Summary",
+          method = 'render',
+          style = 'grid',
+          plain.ascii = FALSE,
+          graph.col = TRUE,       # Include frequency graphs
+          valid.col = TRUE,
+          na.col = TRUE,
+          col.widths = c(150, 100, 300, 100, 100, 100)) # Custom column widths
+```
+
+## Advanced Tips for summarytools in R Markdown Output
+
+### 1. Print with Custom Options
+
+```{r advanced-print,results="asis"}
+# Create summary and print with specific options
+my_summary <- dfSummary(D1 %>% dplyr::select(Age_w1, Gender_w1, PolInt_w1))
+
+print(my_summary, 
+      method = 'render',
+      table.classes = 'table table-striped table-bordered',
+      bootstrap.css = FALSE,
+      escape = FALSE)
+```
+
+### 2. Save Summaries to HTML
+
+```{r save-html, eval=FALSE}
+# Save frequency table to HTML file
+freq_table <- freq(D1$Gender_w1, style = 'rmarkdown')
+print(freq_table, file = "gender_frequency.html")
+
+# Save descriptive stats to HTML
+desc_stats <- descr(D1$Age_w1, style = 'rmarkdown')
+print(desc_stats, file = "age_descriptives.html")
+```
+
+### 3. Comparative Analysis Across Waves
+
+```{r wave-comparison,results="asis"}
+# Compare political participation across waves
+par_comparison <- D1 %>% 
+  dplyr::select(ParAct_w1, ParAct_w2) %>%
+  dfSummary(main = "Political Participation: Wave 1 vs Wave 2",
+            style = 'multiline')
+
+print(par_comparison)
+```
+
+#### Best Practices for SummaryTools in R Markdown
+
+1. **Set global options** in your setup chunk for consistent styling
+2. **Use `results='asis'`** in chunk options for proper HTML rendering
+3. **Customize table classes** for Bootstrap styling if using HTML output
+4. **Control graph size** with `graph.magnif` parameter
+5. **Handle missing values** explicitly with `na.col = TRUE`
+6. **Use meaningful titles** with the `main` parameter
+7. **Group related variables** for focused analysis
+
+#### Styling Tips
+
+- Use `style = 'multiline'` for all functions
+- Set `bootstrap.css = FALSE` in global options
+- Adjust `graph.magnif` to control plot sizes
+- Use `transpose = TRUE` for better readability of descriptive statistics
+- Customize column widths with `col.widths` parameter
+
+# Outputting regression models
+
+## Introduction to modelsummary
+
+The `modelsummary()` function creates beautiful, publication-ready tables from statistical models. It supports dozens of model types and multiple output formats (HTML, LaTeX, Word, etc.).
+
+## Basic Model and Data
+
+```{r data-model}
+# Assuming your data D1 is loaded
+# For demonstration, we'll create sample data with similar structure
+
+# Your regression model
+fit1 <- lm(SMExpPol_w1 ~ Age_w1 + Edu_w1 + Anger_w1 + Hope_w1, data = D1)
+summary(fit1)
+```
+
+# Basic modelsummary Usage
+
+## Simple Model Table
+
+```{r basic-table}
+# Basic model summary with significance stars
+modelsummary(fit1, stars = TRUE)
+```
+
+## Customizing the Table
+
+```{r custom-table}
+# More customized version
+modelsummary(fit1,
+             stars = TRUE,                    # Show significance stars
+             title = "Predicting Social Media Political Exposure",
+             notes = "Data source: Political survey Wave 1")
+```
+
+# Advanced Customization
+
+## Custom Coefficient Names
+
+```{r custom-names}
+# Create cleaner variable names
+modelsummary(fit1,
+             stars = TRUE,
+             coef_rename = c(
+               "(Intercept)" = "Intercept",
+               "Age_w1" = "Age (Wave 1)",
+               "Edu_w1" = "Education Level",
+               "Anger_w1" = "Political Anger",
+               "Hope_w1" = "Political Hope"
+             ),
+             title = "Predictors of Social Media Political Exposure")
+```
+
+## Selecting Statistics
+
+```{r custom-stats}
+# Customize which statistics to show
+modelsummary(fit1,
+             stars = TRUE,
+             statistic = c("std.error", "p.value"),  # Show SE and p-values
+             gof_map = c("nobs", "r.squared", "adj.r.squared", "rmse"),
+             title = "Model with Custom Statistics")
+```
+
+## Multiple Output Formats
+
+```{r output-formats}
+# Different table styles for different outputs
+modelsummary(fit1,
+             stars = TRUE,
+             output = "kableExtra",           # Enhanced HTML tables
+             title = "Enhanced HTML Table") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+# Comparing Multiple Models
+
+```{r multiple-models}
+# Create additional models for comparison
+fit1 <- lm(SMExpPol_w1 ~ Age_w1 + Edu_w1 + Anger_w1 + Hope_w1, data = D1)
+fit2 <- lm(SMExpPol_w1 ~ Age_w1 + Edu_w1, data = D1)
+fit3 <- lm(SMExpPol_w1 ~ Anger_w1 + Hope_w1, data = D1)
+
+# Compare models side by side
+modelsummary(list("Full Model" = fit1,
+                  "Demographics Only" = fit2, 
+                  "Emotions Only" = fit3),
+             stars = TRUE,
+             title = "Model Comparison: Predictors of Social Media Political Exposure")
+```
+
+## Model Comparison with Custom Statistics
+
+```{r model-comparison-stats}
+# Compare models with AIC/BIC
+modelsummary(list("Model 1" = fit1, "Model 2" = fit2, "Model 3" = fit3),
+             stars = TRUE,
+             gof_map = c("nobs", "r.squared", "adj.r.squared", "AIC", "BIC"),
+             title = "Model Comparison with Information Criteria")
+```
+
+# Customizing Appearance
+
+## Professional Styling
+
+```{r professional-styling}
+modelsummary(fit1,
+             stars = TRUE,
+             coef_rename = c(
+               "(Intercept)" = "Intercept",
+               "Age_w1" = "Age",
+               "Edu_w1" = "Education", 
+               "Anger_w1" = "Political Anger",
+               "Hope_w1" = "Political Hope"
+             ),
+             title = "Social Media Political Exposure Model",
+             notes = c("Standard errors in parentheses",
+                      "* p < 0.1, ** p < 0.05, *** p < 0.01"),
+             gof_map = c("nobs", "r.squared", "adj.r.squared"),
+             fmt = 3,
+             output = "gt")
+```
+
+## Adding Custom Rows
+
+```{r custom-rows}
+# Add custom information to the table
+modelsummary(fit1,
+             stars = TRUE,
+             add_rows = data.frame(
+               term = c("Sample", "Wave"),
+               "Model 1" = c("Political Survey", "Wave 1")
+             ),
+             title = "Model with Additional Information")
+```
+
+# Advanced Features
+
+## Confidence Intervals Instead of Standard Errors
+
+```{r confidence-intervals}
+modelsummary(fit1,
+             statistic = "conf.int",  # Show 95% confidence intervals
+             title = "Model with Confidence Intervals")
+```
+
+## Custom Significance Thresholds
+
+```{r custom-significance}
+modelsummary(fit1,
+             stars = c('*' = 0.1, '**' = 0.05, '***' = 0.01, '****' = 0.001),
+             title = "Custom Significance Levels")
+```
+
+## Standardized Coefficients
+
+```{r standardized}
+library(lm.beta)
+
+# Calculate standardized coefficients
+fit1_std <- lm.beta(fit1)
+
+modelsummary(fit1_std,
+             stars = TRUE,
+             title = "Standardized Coefficients Model")
+```
+
+# Exporting Tables
+
+## Save to Different Formats
+
+```{r export-tables, eval=FALSE}
+# Save to Word document
+modelsummary(fit1, 
+             stars = TRUE,
+             output = "table.docx",
+             title = "Social Media Political Exposure Model")
+
+# Save to LaTeX
+modelsummary(fit1,
+             stars = TRUE, 
+             output = "table.tex",
+             title = "Model for LaTeX Document")
+
+# Save to Excel
+modelsummary(fit1,
+             stars = TRUE,
+             output = "table.xlsx", 
+             title = "Model Results")
+```
+
+# Real-World Example: Publication-Ready Table
+
+```{r publication-ready}
+# Create a publication-ready table
+publication_table <- modelsummary(
+  list("Social Media Political Exposure" = fit1),
+  stars = c('†' = 0.1, '*' = 0.05, '**' = 0.01, '***' = 0.001),
+  coef_rename = c(
+    "(Intercept)" = "Constant",
+    "Age_w1" = "Age",
+    "Edu_w1" = "Education Level", 
+    "Anger_w1" = "Political Anger",
+    "Hope_w1" = "Political Hope"
+  ),
+  gof_rename = c(
+    "nobs" = "N",
+    "r.squared" = "R²",
+    "adj.r.squared" = "Adj. R²",
+    "rmse" = "RMSE"
+  ),
+  title = "Regression Results: Predictors of Social Media Political Exposure (Wave 1)",
+  notes = list(
+    "Standard errors in parentheses.",
+    "† p < 0.1, * p < 0.05, ** p < 0.01, *** p < 0.001"
+  ),
+  fmt = fmt_decimal(digits = 3)
+)
+
+publication_table
+```
+
+# Summary: Key modelsummary() Arguments
+
+| Argument | Purpose | Example |
+|----------|---------|---------|
+| `stars` | Add significance stars | `stars = TRUE` |
+| `coef_rename` | Rename coefficients | `coef_rename = c("Age_w1" = "Age")` |
+| `title` | Add table title | `title = "My Model"` |
+| `notes` | Add footnotes | `notes = "Sample size = 200"` |
+| `statistic` | Choose statistics to display | `statistic = "std.error"` |
+| `gof_map` | Select goodness-of-fit stats | `gof_map = c("nobs", "r.squared")` |
+| `output` | Set output format | `output = "kableExtra"` |
+| `fmt` | Number formatting | `fmt = 3` |
+
+# Best Practices
+
+1. **Always use meaningful variable names** with `coef_rename`
+2. **Add descriptive titles and notes** for context
+3. **Choose appropriate statistics** for your audience
+4. **Use consistent formatting** across tables in a document
+5. **Consider your output format** (HTML, PDF, Word) when styling
+
+The `modelsummary()` function makes it easy to create professional, publication-ready regression tables with minimal code while offering extensive customization options for advanced users.
+
+# Introduction to apaTables
+
+The `apaTables` package creates publication-ready tables that follow American Psychological Association (APA) formatting guidelines.
+
+
+```{r descriptives-basic}
+# Select key variables for descriptive table
+descriptive_vars <- D1 %>% 
+  dplyr::select(Age_w1, Edu_w1, PolInt_w1, PolEff_w1, SMExpPol_w1, 
+         Hope_w1, Anger_w1, ParAct_w1)
+
+
+```
+
+
+## Basic Correlation Table
+
+```{r correlation-basic}
+# Create correlation matrix for key variables
+correlation_vars <- D1 %>% 
+  dplyr::select(Age_w1, Edu_w1, PolInt_w1, PolEff_w1, SMExpPol_w1, 
+         Hope_w1, Anger_w1, ParAct_w1)
+
+# APA correlation table
+apa.cor.table(correlation_vars,
+              filename = here("output","correlations.doc"),
+              table.number = 2)
+```
+
+## Correlation Table with Custom Names
+
+```{r correlation-custom}
+# Correlation table with cleaner variable names
+correlation_clean <- D1 %>% 
+  dplyr::select(
+    "Age" = Age_w1,
+    "Education" = Edu_w1, 
+    "Pol. Interest" = PolInt_w1,
+    "Pol. Efficacy" = PolEff_w1,
+    "SM Exposure" = SMExpPol_w1,
+    "Hope" = Hope_w1,
+    "Anger" = Anger_w1,
+    "Participation" = ParAct_w1
+  )
+
+apa.cor.table(correlation_clean,
+              here("output","correlations_clean.doc"), 
+              table.number = 2,
+              show.conf.interval = TRUE,  # Show confidence intervals
+              landscape = TRUE)           # Landscape orientation for wide tables
+```
+
+# 3. Regression Table
+
+## Single Regression Model
+
+```{r regression-single}
+# APA regression table for your model
+apa.reg.table(fit1,
+              filename=here("output","regression.doc"),
+              table.number = 3)
+```
+
+
+# 4. Specialized Tables
+
+## ANOVA Table
+
+```{r anova-table}
+
+# ANOVA model
+anova_model <- aov(SMExpPol_w1 ~ Edu_w1, data = D1)
+
+# APA ANOVA table
+apa.aov.table(anova_model,
+              here("output","anova.doc"),
+              table.number = 4)
+```
+
+
+
+# 5. Customization Options
+
+## Table Appearance Options
+
+```{r customization-options}
+# Comprehensive example with many options
+political_vars <- D1 %>% 
+  dplyr::select(
+    "Political Interest" = PolInt_w1,
+    "Political Efficacy" = PolEff_w1,
+    "Political Hope" = Hope_w1,
+    "Political Anger" = Anger_w1,
+    "SM Political Exposure" = SMExpPol_w1,
+    "Political Participation" = ParAct_w1
+  )
+
+apa.cor.table(political_vars,
+              here("output","political_correlations.doc"),
+              table.number = 6,
+              show.conf.interval = TRUE,
+              show.sig.stars = TRUE,
+              landscape = TRUE)
+```
+
+
+
+## Different Output Formats
+
+```{r output-formats1, eval=FALSE}
+# Save to different formats
+apa.cor.table(correlation_clean,
+              filename = "table.doc")     # Word document (default)
+
+apa.cor.table(correlation_clean,
+              filename = "table.rtf")     # RTF format
+
+# For LaTeX users
+apa.cor.table(correlation_clean,
+              filename = "table.tex")     # LaTeX format
+```
+
+
+
+
+
+

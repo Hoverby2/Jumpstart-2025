@@ -35,8 +35,6 @@ Welcome to the second day of Jumpstart! In Group B we will be exploring mediatio
 -   Simple slopes Analysis
 -   Run mediation models (mediation and process packages)
 
-
-
 ## Get to know your dataset... data about digital media use from the 2020 U.S. Election
 
 ```{r, results='asis'}
@@ -49,9 +47,10 @@ dfSummary(D1,style="multiline")
 ```
 
 ## The Basic Moderation Equation (2 x interaction)
-### RQ1: Which combination of emotions predicts political expression social media?
-### RQ2: Does age predict political expression on social media across education levels?
 
+### RQ1: Which combination of emotions predicts political expression social media?
+
+### RQ2: Does age predict political expression on social media across education levels?
 
 ```{r}
 
@@ -94,6 +93,7 @@ interactions::johnson_neyman(fit2, Anger_w1,Hope_w1)
 sim_slopes(fit2, Anger_w1,Hope_w1)
 sim_slopes(fit3, Age_w1,Edu_w1)
 ```
+
 ## Conducting Three-way Interactions
 
 ```{r}
@@ -108,6 +108,7 @@ modlist<-list("Basic Model"=fit4,
 modelsummary(modlist,stars=T)
 
 ```
+
 ## Visualizing 3-way Interaction
 
 ```{r}
@@ -167,6 +168,25 @@ pairs(emm_model, by = "treatment")
 
 ```
 
+## Now it's your turn! Moderation Practice
+
+```{r, results='asis'}
+#Step 1: Run a regression model predicting News_Online_w1 with a moderation that looks at the interaction between Education (Edu_w1) and Age (Age_w1)
+
+#Step 2: Probe and plot this interaction
+
+#Step 3: Interpret
+
+#Step 4: Run a regression model predicting News_Online_w1 with a moderation that looks at the interaction between Age (Edu_w1) and Conflict Avoidance (Conflict_w1)
+
+#Step 5: Probe and plot this interaction
+
+#Step 6: Create a Johnson-Neyman Plot
+
+#Step 7: Interpret
+
+```
+
 ## Basic mediation w/ the mediation() package
 
 ```{r}
@@ -209,8 +229,20 @@ summary (med1)
 
 
 ```
-## Extra: Mediation with PROCESS
 
+## Now it's your turn! Mediation Practice
+
+```{r, results='asis'}
+#Step 1: Run regression models for mediation, where y = News_Online_w1 x = Age_w1 and m = a variable of your choice
+
+#Step 2: Calculate indirect relationships and test for mediation
+
+#Step 3: Interpret
+
+```
+
+
+## Extra: Mediation with PROCESS
 
 ```{r}
 
